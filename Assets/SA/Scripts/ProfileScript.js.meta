@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: acd40a3382b4ffc46a284ea94a334771
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - HUDS: {instanceID: 0}
+  - HUDMenus: {fileID: 11400000, guid: 7d9e479a214528d48bcaf66aeedacc06, type: 2}
+  - mAvatar1: {fileID: 2800000, guid: f9fa95082facd994abedd540c298648f, type: 3}
+  - mAvatar2: {fileID: 2800000, guid: 4cecabee9c68f3d4888e10d46d59b480, type: 3}
+  - mAvatar3: {fileID: 2800000, guid: d9417adb9e3ab5b4d9e01bd7c4fe63d0, type: 3}
+  - mAvatar4: {fileID: 2800000, guid: d720f440adc62e7448cb4232d45bb77a, type: 3}
+  - mAvatar5: {fileID: 2800000, guid: d99b74833cfa9e543b1ef0faf391f24d, type: 3}
+  - mAvatar6: {fileID: 2800000, guid: 9a6a37b8790667646824c569ef012f24, type: 3}
+  - mAvatar7: {fileID: 2800000, guid: 6c580d7e6dd243841bda58b7e92eebd9, type: 3}
+  - mAvatar8: {fileID: 2800000, guid: 478ca7da3e2ae0942a02a094a7caab5e, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

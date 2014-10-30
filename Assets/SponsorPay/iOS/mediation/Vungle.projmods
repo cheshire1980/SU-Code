@@ -1,0 +1,51 @@
+{
+  "group": "Mediation/Vungle",
+  "patches": [],
+  "libs": [
+    "libz.dylib",
+    "SponsorPay/iOS/ThirdParty/Vungle/vunglepub.embeddedframework/vunglepub.framework:<group>"
+  ],
+  "librarysearchpaths":[],
+  "frameworks": [
+    "AVFoundation.framework",
+    "CFNetwork.framework",
+    "CoreGraphics.framework",
+    "AudioToolbox.framework",
+    "CoreMedia.framework",
+    "Foundation.framework",
+    "MediaPlayer.framework",
+    "QuartzCore.framework",
+    "SystemConfiguration.framework",
+    "UIKit.framework",
+    "StoreKit.framework",
+    "CoreLocation.framework",
+    "AdSupport.framework:weak"
+  ],
+  "frameworksearchpaths": [
+    "SponsorPay/iOS/ThirdParty/Vungle/vunglepub.embeddedframework/"
+  ],
+  "headerpaths": [
+    "SponsorPay/iOS/mediation/Vungle"
+  ],
+  "files": [
+    "SponsorPay/iOS/mediation/Vungle/SPVungleNetwork.m:-fobjc-arc",
+    "SponsorPay/iOS/mediation/Vungle/SPVungleRewardedVideoAdapter.m:-fobjc-arc"
+  ],
+  "folders": [
+    "SponsorPay/iOS/ThirdParty/Vungle/vunglepub.embeddedframework/Resources"
+  ],	
+  "excludes": [],
+  "linkers": [
+    "-all_load",
+    "-ObjC"],
+  "plist": [
+    "<plist>
+      <key>SPNetworkName</key>
+      <string>Vungle</string>
+      <key>SPNetworkParameters</key>
+      <dict>
+        <key>SPVungleAppId</key>
+        <string></string>
+      </dict>
+    </plist>"]
+}

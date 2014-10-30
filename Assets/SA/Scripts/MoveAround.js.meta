@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: b2973bfa4fc70944db7a7c07f057d8e2
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - Collect: {fileID: 8300000, guid: dad3fb6fb3faa884592fac3cefa990c9, type: 3}
+  - Notification: {instanceID: 0}
+  - BlasterPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

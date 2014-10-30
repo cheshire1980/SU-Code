@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 2222528ceb8206744b91557cf10fae6f
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - target: {instanceID: 0}
+  - blaster: {fileID: 400000, guid: ea9ae17848d0a4e49a0376c09d8a5d4b, type: 2}
+  - explosion: {fileID: 400004, guid: 169b10ce10f4327cb9f40f6b117ed8d7, type: 2}
+  - blasterhit: {fileID: 8300000, guid: a4e7a37b34712bb448b75ba93152f44a, type: 3}
+  - sparks: {fileID: 400000, guid: 7a598717ded698c4dbdd57c2260fa1e1, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

@@ -1,0 +1,47 @@
+3.9:
+New Features:
+Package Info Load API
+PlayMaker Actions Updated
+AndroidInAppPurchaseManager, state flags added
+
+Fixes:
+GooglePurchaseTemplate, originalJson retrieval fixed.
+Manifest comment more clear now
+Leade-board Custom GUI
+ 
+
+Code Refactor:
+Removed: 
+Assets/Extensions/AndroidNative/Other/Twitter
+All Scene under xExample/Scenes Moved to corresponding folder
+only Preview Scene should be under  xExample/Scenes
+
+Added:
+Assets/Extensions/GooglePlayCommon/Social/Twitter/Manage
+
+
+
+
+3.8:
+Code Refactor:
+Singleton - > Singleton
+Methods spelling fixes
+Updates:
+GPLeaderboard class - more functions added
+Documentation Update
+
+3.7:
+Play Service version updated
+Stability improvments
+Google Ad IAP listener added
+Play Maker Actions fix 
+New Play Maker Actions
+
+3.6:
+Score load fixed
+Posting with Auth check for twitter and facebook
+Facebook App request added
+Native Preloader Added
+Shared Intent added
+Native UI post to Twitter and Facebook
+Example Scene updated

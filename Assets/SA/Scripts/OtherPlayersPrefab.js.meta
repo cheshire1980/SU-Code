@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: f464ef3626515a24e85f32836fa70f21
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - HUDName: {fileID: 11400000, guid: b61679f62d2c6a146a2be610e86f05e1, type: 2}
+  - HUDBuddies: {fileID: 11400000, guid: b34124aa6864f244ab83f56a2fa2802b, type: 2}
+  - HUDDEV: {fileID: 11400000, guid: 3f3fc0a4e6659e346b23f3992cc3aa4a, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

@@ -1,0 +1,46 @@
+{
+  "group": "Mediation/Flurry",
+  "patches": [],
+  "libs": [    
+    "SponsorPay/iOS/ThirdParty/Flurry/Flurry/libFlurry_4.3.2.a:<group>",
+    "SponsorPay/iOS/ThirdParty/Flurry/FlurryAds/libFlurryAds_4.3.2.a:<group>"
+  ],
+  "librarysearchpaths": [
+    "SponsorPay/iOS/ThirdParty/Flurry/Flurry",
+    "SponsorPay/iOS/ThirdParty/Flurry/FlurryAds"
+  ],
+  "frameworks": [
+    "CoreGraphics.framework",
+    "Foundation.framework",
+    "MediaPlayer.framework",
+    "Security.framework",
+    "StoreKit.framework:weak",
+    "SystemConfiguration.framework",
+    "UIKit.framework",
+    "AdSupport.framework:weak"
+  ],
+  "headerpaths": [
+    "SponsorPay/iOS/mediation/Flurry",
+    "SponsorPay/iOS/ThirdParty/Flurry/Flurry",
+    "SponsorPay/iOS/ThirdParty/Flurry/FlurryAds"
+  ],
+  "files": [
+    "SponsorPay/iOS/mediation/Flurry/SPFlurryNetwork.m:-fobjc-arc",
+    "SponsorPay/iOS/mediation/Flurry/SPFlurryRewardedVideoAdapter.m:-fobjc-arc"
+  ],
+  "folders": [],	
+  "excludes": [],
+  "linkers": [],
+  "plist":[
+    "<plist>
+    <key>SPNetworkName</key>
+    <string>Flurry</string>
+    <key>SPNetworkParameters</key>
+    <dict>
+      <key>SPFlurryAdSpaceVideo</key>
+      <string></string>
+      <key>SPFlurryApiKey</key>
+      <string></string>
+    </dict>
+    </plist>"]
+}

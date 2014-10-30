@@ -1,0 +1,40 @@
+{
+  "group": "Mediation/Appia",
+  "patches": [],
+  "libs": [
+    "SponsorPay/iOS/ThirdParty/Appia/AppiaSDK.framework:<group>",
+    "SponsorPay/iOS/ThirdParty/Appia/AppiaSDK.bundle:<group>"
+  ],
+  "librarysearchpaths": [],
+  "frameworks": [
+    "StoreKit.framework:weak",
+    "QuartzCore.framework"
+  ],
+  "frameworksearchpaths": [
+    "SponsorPay/iOS/ThirdParty/Appia/"
+  ],
+  "headerpaths": [
+    "SponsorPay/iOS/mediation/Appia"
+  ],
+  "files": [
+    "SponsorPay/iOS/mediation/Appia/SPAppiaInterstitialAdapter.m:-fobjc-arc",
+    "SponsorPay/iOS/mediation/Appia/SPAppiaNetwork.m:-fobjc-arc"
+  ],
+  "folders": [],	
+  "excludes": [],
+  "linkers": [
+    "-ObjC"
+  ],
+  "plist": [
+    "<plist>
+      <key>SPNetworkName</key>
+      <string>Appia</string>
+      <key>SPNetworkParameters</key>
+      <dict>
+        <key>SPAppiaPlacementIdInterstitial</key>
+        <string></string>
+        <key>SPAppiaSiteId</key>
+        <string></string>
+      </dict>
+    </plist>"]
+}

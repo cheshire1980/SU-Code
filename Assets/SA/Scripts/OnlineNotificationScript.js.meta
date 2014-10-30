@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c6be5239bc0fc87458f1ccde2a9c0314
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - hudText: {fileID: 11400000, guid: b61679f62d2c6a146a2be610e86f05e1, type: 2}
+  - hudGUI: {fileID: 11400000, guid: dce3ad65bcc89ac4bb2cbf24e836dbee, type: 2}
+  - hudBGUI: {fileID: 11400000, guid: 7c6ad5eb5e476394aa265725e6dcdb81, type: 2}
+  - huds: {instanceID: 0}
+  - online: {fileID: 2800000, guid: 812a3382f57bc78438dc154341dd0de8, type: 3}
+  - offline: {fileID: 2800000, guid: 2bcb85be56a04934db8772c60b52144d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

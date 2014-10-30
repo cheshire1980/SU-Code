@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 0cd8534b93001a449898368ba0ed0332
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - explosion: {fileID: 400004, guid: 169b10ce10f4327cb9f40f6b117ed8d7, type: 2}
+  - HUDName: {fileID: 11400000, guid: b61679f62d2c6a146a2be610e86f05e1, type: 2}
+  - HUDBuddies: {fileID: 11400000, guid: b34124aa6864f244ab83f56a2fa2802b, type: 2}
+  - HUDDEV: {fileID: 11400000, guid: 3f3fc0a4e6659e346b23f3992cc3aa4a, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

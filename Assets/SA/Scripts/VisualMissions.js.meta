@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 30b15279d8adf0d499852c134a890175
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - vMissionsTemplate: {fileID: 400012, guid: 50bc94d830751d04b86b0c7a33e8076e, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

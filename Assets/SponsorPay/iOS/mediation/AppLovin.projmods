@@ -1,0 +1,43 @@
+{
+  "group": "Mediation/AppLovin",
+  "patches": [],
+  "libs": [
+    "SponsorPay/iOS/ThirdParty/AppLovin/libAppLovinSdk.a:<group>"
+  ],
+  "librarysearchpaths": [
+    "SponsorPay/iOS/ThirdParty/AppLovin/"
+  ],
+  "frameworks": [
+    "AdSupport.framework:weak",
+    "CoreTelephony.framework",
+    "CoreGraphics.framework",
+    "MediaPlayer.framework",
+    "SystemConfiguration.framework",
+    "UIKit.framework"
+  ],
+  "headerpaths": [
+    "SponsorPay/iOS/mediation/AppLovin",
+    "SponsorPay/iOS/ThirdParty/AppLovin/headers"
+  ],
+  "files": [
+    "SponsorPay/iOS/mediation/AppLovin/SPAppLovinNetwork.m:-fobjc-arc",
+    "SponsorPay/iOS/mediation/AppLovin/SPAppLovinInterstitialAdapter.m:-fobjc-arc",
+    "SponsorPay/iOS/mediation/AppLovin/SPAppLovinRewardedVideoAdapter.m:-fobjc-arc"
+  ],
+  "folders": [],	
+  "excludes": [],
+  "linkers": [
+    "-all_load",
+    "-ObjC"
+  ],
+  "plist":[
+    "<plist>
+      <key>SPNetworkName</key>
+      <string>AppLovin</string>
+      <key>SPNetworkParameters</key>
+      <dict>
+        <key>SPAppLovinSdkKey</key>
+        <string></string>
+      </dict>
+    </plist>"]
+}

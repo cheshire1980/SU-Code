@@ -1,0 +1,40 @@
+{
+  "group": "Mediation/Applifier",
+  "patches": [],
+  "libs": [
+    "SponsorPay/iOS/ThirdParty/Applifier/ApplifierImpact.framework:<group>",
+    "SponsorPay/iOS/ThirdParty/Applifier/ApplifierImpact.bundle:<group>"
+  ],
+  "librarysearchpaths": [],
+  "frameworks": [
+    "StoreKit.framework:weak",
+    "AdSupport.framework:weak"
+  ],
+  "frameworksearchpaths": [
+    "SponsorPay/iOS/ThirdParty/Applifier/"
+  ],
+  "headerpaths": [
+    "SponsorPay/iOS/mediation/Applifier"
+  ],
+  "files": [
+    "SponsorPay/iOS/mediation/Applifier/SPApplifierNetwork.m:-fobjc-arc",
+    "SponsorPay/iOS/mediation/Applifier/SPApplifierRewardedVideoAdapter.m:-fobjc-arc"
+  ],
+  "folders": [],	
+  "excludes": [],
+  "linkers": [
+    "-ObjC"
+  ],
+  "plist": [
+    "<plist>
+      <key>SPNetworkName</key>
+      <string>Applifier</string>
+      <key>SPNetworkParameters</key>
+      <dict>
+        <key>SPApplifierGameId</key>
+        <string></string>
+        <key>SPApplifierShowOffers</key>
+        <false/>
+      </dict>
+    </plist>"]
+}

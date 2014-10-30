@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: e430eafc6b7bb6842bbdb05de6c48864
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - HUDS: {fileID: 11400000, guid: b61679f62d2c6a146a2be610e86f05e1, type: 2}
+  - HUDMenus: {fileID: 11400000, guid: 7d9e479a214528d48bcaf66aeedacc06, type: 2}
+  - HUDTech: {fileID: 11400000, guid: 7d9967f4644e74147aab7130ab226cbb, type: 2}
+  - HUDTechAsk: {fileID: 11400000, guid: 321614cc2b4332241933b15145507d98, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
