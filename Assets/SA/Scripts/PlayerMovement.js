@@ -422,7 +422,7 @@ function clearInstantiate (viewPos : Vector3, viewID : NetworkViewID, info : Net
 	}
 }
 
-function FixedUpdate ()
+function Update ()
 {
 	var exp;
 	var temppos;

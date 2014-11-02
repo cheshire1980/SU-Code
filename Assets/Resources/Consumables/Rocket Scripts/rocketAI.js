@@ -1,5 +1,13 @@
 ﻿#pragma strict
 
+private var lastSynchronizationTime = 0f;
+private var syncDelay = 0f;
+private var syncTime = 0f;
+private var syncStartPosition : Vector3;
+private var syncEndPosition : Vector3;
+private var syncStartRotation : Quaternion;
+private var syncEndRotation : Quaternion;
+
 var rocketAudio : AudioClip;
 
 var target : GameObject;
@@ -69,6 +77,48 @@ function Update ()
 			exp.tag = "rocket";
 		}
 	}
+	
+	if (networkView.isMine == false)
+    {
+        SyncedMovement();
+    }
+}
+
+function quaternionIsNan (quat : Quaternion)
+{
+	if (float.IsNaN(quat.x))
+		return true;
+	else if (float.IsNaN(quat.y))
+		return true;
+	else if (float.IsNaN(quat.z))
+		return true;
+	else if (float.IsNaN(quat.w))
+		return true;
+	else
+		return false;
+}
+
+function vectorIsNan (vect : Vector3)
+{
+	if (float.IsNaN(vect.x))
+		return true;
+	else if (float.IsNaN(vect.y))
+		return true;
+	else if (float.IsNaN(vect.z))
+		return true;
+	else
+		return false;
+}
+
+function SyncedMovement ()
+{
+    syncTime += Time.deltaTime;
+    
+	if (!vectorIsNan(Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay)))
+	    transform.position = Vector3.Lerp(syncStartPosition, syncEndPosition, syncTime / syncDelay);
+	    
+	if (!quaternionIsNan(Quaternion.Lerp(syncStartRotation, syncEndRotation, syncTime / syncDelay)))
+	    transform.rotation = Quaternion.Lerp(syncStartRotation, syncEndRotation, syncTime / syncDelay);
 }
 
 function OnTriggerEnter(obj:Collider)
@@ -118,5 +168,41 @@ function OnTriggerEnter(obj:Collider)
 			exp.tag = "rocket";
 			
 		}
+	}
+}
+
+function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo)
+{	
+	var syncPosition : Vector3;
+	var syncRotation : Quaternion;
+	var syncVelocity : Vector3;
+	
+	if (stream.isWriting)
+	{
+		//detectInfoChange();
+		
+		syncPosition = transform.position;
+		syncRotation = transform.rotation;
+		syncVelocity = rigidbody.velocity;
+		
+		stream.Serialize(syncPosition);
+		stream.Serialize(syncRotation);
+		stream.Serialize(syncVelocity);
+	}
+	else
+	{
+		stream.Serialize(syncPosition);
+		stream.Serialize(syncRotation);
+		stream.Serialize(syncVelocity);
+		
+        syncTime = 0f;
+        syncDelay = Time.time - lastSynchronizationTime;
+        lastSynchronizationTime = Time.time;
+        
+        syncEndPosition = syncPosition + syncVelocity * syncDelay;
+        syncStartPosition = rigidbody.position;
+        
+        syncStartRotation = transform.rotation;
+        syncEndRotation = syncRotation;
 	}
 }
