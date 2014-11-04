@@ -499,8 +499,17 @@ function enableLogin()
 	
 	connFlag = true;
 	phase1 = true;
-	Network.Connect(svrAddr,svrPort);
+	//Network.Connect(svrAddr,svrPort);
+	PhotonNetwork.ConnectUsingSettings("v1.0");
+	//PhotonNetwork.JoinRoom("main");
 
+}
+
+function OnJoinedLobby ()
+{
+	Debug.Log("Entered this function test");
+	
+	PhotonNetwork.JoinRoom("main");
 }
 
 function enableGuestLogin()
