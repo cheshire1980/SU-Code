@@ -260,7 +260,8 @@ function OnGUI ()
 	}
 }
 
-function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo)
+function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
+//function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo)
 {	
 	var syncPosition : Vector3;
 	var syncRotation : Quaternion;
@@ -274,15 +275,15 @@ function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo)
 		syncRotation = transform.rotation;
 		syncVelocity = rigidbody.velocity;
 		
-		stream.Serialize(syncPosition);
-		stream.Serialize(syncRotation);
-		stream.Serialize(syncVelocity);
+		stream.SendNext(syncPosition);
+		stream.SendNext(syncRotation);
+		stream.SendNext(syncVelocity);
 	}
 	else
 	{
-		stream.Serialize(syncPosition);
-		stream.Serialize(syncRotation);
-		stream.Serialize(syncVelocity);
+		syncPosition = stream.ReceiveNext();
+		syncRotation = stream.ReceiveNext();
+		syncVelocity = stream.ReceiveNext();
 		
         syncTime = 0f;
         syncDelay = Time.time - lastSynchronizationTime;
