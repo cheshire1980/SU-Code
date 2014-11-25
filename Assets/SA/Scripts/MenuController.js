@@ -499,8 +499,8 @@ function enableLogin()
 	
 	connFlag = true;
 	phase1 = true;
-	//Network.Connect(svrAddr,svrPort);
-	PhotonNetwork.ConnectUsingSettings("v1.0");
+	Network.Connect(svrAddr,svrPort);
+	//PhotonNetwork.ConnectUsingSettings("v1.0");
 	//PhotonNetwork.JoinRoom("main");
 
 }
@@ -511,7 +511,7 @@ function OnJoinedLobby ()
 	
 	PhotonNetwork.JoinRoom("main");
 	
-	PlayerPrefs.SetString("PlayerActiveShip", "phaseCrawler");
+	//PlayerPrefs.SetString("PlayerActiveShip", "phaseCrawler");
 	Application.LoadLevel("TriniSpace");
 }
 
@@ -598,7 +598,8 @@ function LoggedIn(Name:String,location:Vector3,gm:int,rank:int,experience:float,
 	ErrorTriggerIncorrectVersion = false;
 	sDisco = false;
 
-	Application.LoadLevel(zone);
+	PhotonNetwork.ConnectUsingSettings("v1.0");
+	//Application.LoadLevel(zone);
 }
 
 @RPC
