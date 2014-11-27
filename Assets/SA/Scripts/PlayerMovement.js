@@ -93,7 +93,7 @@ function detectInfoChange ()
 
 function Awake ()
 {
-	DontDestroyOnLoad(this);
+	//DontDestroyOnLoad(this);
 }
 
 function Start ()

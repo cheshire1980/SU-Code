@@ -446,6 +446,7 @@ function spawnShip (newpos : Vector3)
 
 function Start ()
 {
+	PhotonNetwork.SetSendingEnabled(0, true);
 	PhotonNetwork.isMessageQueueRunning = true;
 	
 	mm = GameObject.Find("MiniMap");
