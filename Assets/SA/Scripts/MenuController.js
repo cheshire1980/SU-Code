@@ -509,7 +509,7 @@ function OnJoinedLobby ()
 {
 	Debug.Log("Entered this function test");
 	
-	PhotonNetwork.JoinRoom("main");
+	//PhotonNetwork.JoinRoom("main");
 	
 	//PlayerPrefs.SetString("PlayerActiveShip", "phaseCrawler");
 	Application.LoadLevel("TriniSpace");

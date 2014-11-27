@@ -434,7 +434,7 @@ function spawnShip (newpos : Vector3)
 		respawn = Network.Instantiate(shivanInterceptor, newpos, Quaternion.identity,0);
 		
 	else if (usrActiveship == "phaseCrawler")
-		respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0).transform;
+		respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0)	.transform;
 
 	respawn.position = newpos;
 	respawn.name = usrAccount;
@@ -522,12 +522,55 @@ function Start ()
 
 	respawn.name = usrAccount;*/
 	
-	if (GameObject.Find(usrAccount) == null)
-		spawnShip(pos);
+	//if (GameObject.Find(usrAccount) == null)
+	//	spawnShip(pos);
+	
+	PhotonNetwork.CreateRoom("main");
+	//PhotonNetwork.JoinRoom("main");
 	
 	//"PlayerShip";
 	//SmoothFollowNew.target = respawn;
 	//MouseOrbit.target = respawn;
+	healthUpdate = true;
+		
+	// Set Avatar active
+	//viewHUDmini = GameObject.Find(usrActiveship);
+	//viewHUDmini.SetActiveRecursively(true);
+	
+	// Boost Specs with skills
+	addSkills();
+	//enterSpace();
+	
+	requestMemberships();
+	requestMinerals();
+	requestAmber();
+	requestAzurite();
+	requestModules();
+	requestRockets();
+	requestSentries();
+	
+	requestNews();
+	requestShipName();
+	requestISSpecialEvent();
+}
+
+function OnPhotonCreateRoomFailed()
+{
+	Debug.Log("*** Room already created, joining it ***");
+	PhotonNetwork.JoinRoom("main");
+}
+
+function OnJoinedRoom()
+{
+	Debug.Log("*** JOINED THE MAIN ROOM ***");
+	var pos : Vector3 = Vector3(PlayerPrefs.GetFloat("PlayerX"),PlayerPrefs.GetFloat("PlayerY"),PlayerPrefs.GetFloat("PlayerZ"));
+	
+	if (GameObject.Find(usrAccount) == null)
+	{
+		Debug.Log(" LOADING SHIP ");
+		spawnShip(pos);
+	}
+
 	healthUpdate = true;
 		
 	// Set Avatar active

@@ -78,8 +78,11 @@ static var forwardbackwardnew : float;
 function Start ()
 {
 	usrAccount = PlayerPrefs.GetString("PlayerName");
+	pView = gameObject.GetComponent(PhotonView);
 	//calib = Input.acceleration.z;
 }
+
+var pView : PhotonView = gameObject.GetComponent(PhotonView);
 
 /*
 function OnGUI ()
@@ -131,7 +134,7 @@ function OnGUI ()
 
 function FixedUpdate()
 {
-	if (networkView.isMine)
+	if (pView.isMine)
 	{
 	//Input.compensateSensors = true;
 	//accel = Vector3.Lerp(accel, Input.acceleration, filter * Time.deltaTime);

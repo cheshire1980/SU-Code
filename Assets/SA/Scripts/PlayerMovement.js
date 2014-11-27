@@ -39,9 +39,11 @@ var opvp : int;
 var oshipname : String = "";
 
 
+var pView : PhotonView = gameObject.GetComponent(PhotonView);
+
 function backupInfo ()
 {
-	if (networkView.isMine)
+	if (pView.isMine == true)
 	{
 		ohealth = health;
 		ohealthmax = healthmax;
@@ -60,7 +62,7 @@ function backupInfo ()
 
 function detectInfoChange ()
 {
-	if (networkView.isMine)
+	if (pView.isMine)
 	{
 		var tempchange : boolean = false;
 		
@@ -96,7 +98,9 @@ function Awake ()
 
 function Start ()
 {
-	if (networkView.isMine)
+	pView = gameObject.GetComponent(PhotonView);
+	
+	if (pView.isMine)
 	{
 		health = HUD.usrHealth;
 		healthmax = HUD.usrHealthMax;
@@ -123,7 +127,7 @@ function OnGUI ()
 			GameObject.Destroy(gameObject);
 	}
 		
-	if (networkView.isMine)
+	if (pView.isMine == true)
 	{
 		if (playerName == HUD.usrAccount)
 		{
@@ -150,7 +154,7 @@ function OnGUI ()
 
 		if (screenLoc1.x > 0 && screenLoc1.x < Screen.width && screenLoc1.y > 0 && screenLoc1.y < Screen.height && cameraRelative.z > 0)
 		{
-			if (networkView.isMine)
+			if (pView.isMine)
 			{
 				if (gm == 0)
 				{
@@ -179,7 +183,7 @@ function OnGUI ()
 			GUI.Box(Rect(screenLoc1.x-(5*(playerName.Length/2)),(Screen.height-screenLoc1.y)-75,70,5),"");
 			GUI.DrawTexture(Rect(screenLoc1.x-(5*(playerName.Length/2)),(Screen.height-screenLoc1.y)-75,70 * Mathf.Clamp01(uhp),5), thud);
 			
-			if (networkView.isMine)
+			if (pView.isMine)
 			{
 				var tehud = GameObject.Find("Main Camera").GetComponent(HUD).mEnergy;
 				GUI.Box(Rect(screenLoc1.x-(5*(HUD.usrAccount.Length/2)),(Screen.height-screenLoc1.y)-68,70,5),"");
@@ -243,7 +247,7 @@ function OnGUI ()
 					gmtag = gmtag + "- \"" + shipname + "\"";
 			}
 				
-			if (networkView.isMine)
+			if (pView.isMine)
 			{			
 				GUI.Label(Rect(screenLoc1.x-(5*(playerName.Length/2)),(Screen.height-screenLoc1.y)-65,1000,100), playerName);
 				GUI.Label(Rect(screenLoc1.x-(5*(playerName.Length/2)),(Screen.height-screenLoc1.y)-55,1000,100), "Rank: " + rank.ToString());
@@ -301,7 +305,7 @@ function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
 @RPC
 function shipName (name : String, info : NetworkMessageInfo)
 {
-	if (!networkView.isMine)
+	if (!pView.isMine)
 	{
 		shipname = name;
 	}
@@ -429,13 +433,13 @@ function Update ()
 	var temppos;
 	var temprot;
 	
-    if (!networkView.isMine)
+    if (!pView.isMine == true)
     {
     	if (gameObject.name != playerName)
     		gameObject.name = playerName;
     }
     
-	if (networkView.isMine)
+	if (pView.isMine == true)
 	{
 		if (health <= 0)
 		{
@@ -452,7 +456,7 @@ function Update ()
 		}
 	}
 	
-	if (networkView.isMine == false)
+	if (pView.isMine == false)
     {
         SyncedMovement();
     }
