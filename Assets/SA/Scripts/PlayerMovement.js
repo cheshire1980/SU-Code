@@ -55,7 +55,7 @@ function backupInfo ()
 		if (oshipname != shipname)
 		{
 			oshipname = shipname;
-			networkView.RPC ("shipName", RPCMode.AllBuffered, shipname);
+			photonview.RPC ("shipName", PhotonTargets.AllBuffered, shipname);
 		}
 	}
 }
@@ -85,8 +85,8 @@ function detectInfoChange ()
 		{
 			Debug.Log("Flagged because of name change" + oshipname + " " + shipname);
 			backupInfo();
-			networkView.RPC ("sendInfo", RPCMode.AllBuffered, HUD.usrAccount, networkView.viewID, pvp, rank, health, healthmax, gm);
-			networkView.RPC ("shipName", RPCMode.AllBuffered, shipname);
+			photonview.RPC("sendInfo",PhotonTargets.AllBuffered, HUD.usrAccount, networkView.viewID, pvp, rank, health, healthmax, gm);
+			photonview.RPC ("shipName", PhotonTargets.AllBuffered, shipname);
 		}
 	}
 }
@@ -113,7 +113,7 @@ function Start ()
 		shipname = HUD.usrActiveshipname;
 		
 		backupInfo();
-		networkView.RPC("sendInfo",RPCMode.AllBuffered, HUD.usrAccount, networkView.viewID, pvp, rank, health, healthmax, gm);
+		photonview.RPC("sendInfo",PhotonTargets.AllBuffered, HUD.usrAccount, networkView.viewID, pvp, rank, health, healthmax, gm);
 	}
 }
 
