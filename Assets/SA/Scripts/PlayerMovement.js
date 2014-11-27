@@ -119,13 +119,13 @@ function Start ()
 
 function OnGUI ()
 {
-	if (Network.isClient)
+	/*if (Network.isClient)
 	{
 		if (gameObject.name == "")
 			GameObject.Destroy(gameObject);
 		else if (gameObject.name == null)
 			GameObject.Destroy(gameObject);
-	}
+	}*/
 		
 	if (pView.isMine == true)
 	{
