@@ -513,7 +513,7 @@ function OnJoinedLobby ()
 	
 	//PlayerPrefs.SetString("PlayerActiveShip", "phaseCrawler");
 	PhotonNetwork.automaticallySyncScene = true;
-	PhotonNetwork.isMessageQueueRunning = false;
+	//PhotonNetwork.isMessageQueueRunning = false;
 	PhotonNetwork.LoadLevel("TriniSpace");
 }
 
@@ -600,6 +600,7 @@ function LoggedIn(Name:String,location:Vector3,gm:int,rank:int,experience:float,
 	ErrorTriggerIncorrectVersion = false;
 	sDisco = false;
 
+	PhotonNetwork.isMessageQueueRunning = false;
 	PhotonNetwork.ConnectUsingSettings("v1.0");
 	//Application.LoadLevel(zone);
 }
