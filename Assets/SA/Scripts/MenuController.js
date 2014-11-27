@@ -600,9 +600,9 @@ function LoggedIn(Name:String,location:Vector3,gm:int,rank:int,experience:float,
 	ErrorTriggerIncorrectVersion = false;
 	sDisco = false;
 
-	PhotonNetwork.isMessageQueueRunning = false;
+	//PhotonNetwork.isMessageQueueRunning = false;
 	PhotonNetwork.ConnectUsingSettings("v1.0");
-	PhotonNetwork.isMessageQueueRunning = false;
+	//PhotonNetwork.isMessageQueueRunning = false;
 	//Application.LoadLevel(zone);
 }
 
