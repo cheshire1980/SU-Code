@@ -134,6 +134,8 @@ function OnGUI ()
 
 function FixedUpdate()
 {
+	pView = gameObject.GetComponent(PhotonView);
+	
 	if (pView.isMine)
 	{
 	//Input.compensateSensors = true;
