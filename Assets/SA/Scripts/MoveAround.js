@@ -82,7 +82,7 @@ function Start ()
 	//calib = Input.acceleration.z;
 }
 
-var pView : PhotonView = gameObject.GetComponent(PhotonView);
+var pView : PhotonView;
 
 /*
 function OnGUI ()

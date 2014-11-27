@@ -39,7 +39,7 @@ var opvp : int;
 var oshipname : String = "";
 
 
-var pView : PhotonView = gameObject.GetComponent(PhotonView);
+var pView : PhotonView;
 
 function backupInfo ()
 {
