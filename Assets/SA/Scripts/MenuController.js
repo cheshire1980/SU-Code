@@ -512,6 +512,7 @@ function OnJoinedLobby ()
 	//PhotonNetwork.JoinRoom("main");
 	
 	//PlayerPrefs.SetString("PlayerActiveShip", "phaseCrawler");
+	PhotonNetwork.automaticallySyncScene = true;
 	PhotonNetwork.LoadLevel("TriniSpace");
 }
 
