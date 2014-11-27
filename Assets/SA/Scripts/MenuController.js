@@ -512,7 +512,7 @@ function OnJoinedLobby ()
 	//PhotonNetwork.JoinRoom("main");
 	
 	//PlayerPrefs.SetString("PlayerActiveShip", "phaseCrawler");
-	Application.LoadLevel("TriniSpace");
+	PhotonNetwork.LoadLevel("TriniSpace");
 }
 
 function enableGuestLogin()
