@@ -445,7 +445,9 @@ function spawnShip (newpos : Vector3)
 }
 
 function Start ()
-{	
+{
+	PhotonNetwork.isMessageQueueRunning = true;
+	
 	mm = GameObject.Find("MiniMap");
 	
 	usrAccount = PlayerPrefs.GetString("PlayerName");
