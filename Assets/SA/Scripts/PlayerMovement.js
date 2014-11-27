@@ -85,7 +85,7 @@ function detectInfoChange ()
 		{
 			Debug.Log("Flagged because of name change" + oshipname + " " + shipname);
 			backupInfo();
-			pView.RPC("sendInfo",PhotonTargets.AllBuffered, HUD.usrAccount, networkView.viewID, pvp, rank, health, healthmax, gm);
+			pView.RPC("sendInfo",PhotonTargets.AllBuffered, HUD.usrAccount, pView.viewID, pvp, rank, health, healthmax, gm);
 			pView.RPC ("shipName", PhotonTargets.AllBuffered, shipname);
 		}
 	}
@@ -113,12 +113,13 @@ function Start ()
 		shipname = HUD.usrActiveshipname;
 		
 		backupInfo();
-		pView.RPC("sendInfo",PhotonTargets.AllBuffered, HUD.usrAccount, networkView.viewID, pvp, rank, health, healthmax, gm);
+		pView.RPC("sendInfo",PhotonTargets.AllBuffered, HUD.usrAccount, pView.viewID, pvp, rank, health, healthmax, gm);
 	}
 }
 
 function OnGUI ()
 {
+	pView = gameObject.GetComponent(PhotonView);
 	/*if (Network.isClient)
 	{
 		if (gameObject.name == "")
@@ -305,16 +306,22 @@ function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
 @RPC
 function shipName (name : String, info : NetworkMessageInfo)
 {
-	if (!pView.isMine)
+	pView = gameObject.GetComponent(PhotonView);
+	
+	if (pView.isMine == false)
 	{
 		shipname = name;
 	}
 }
 
 @RPC
-function sendInfo (name : String, netID : NetworkViewID, rpvp : int, rrank : int, rhealth : float, rhealthmax : float, rgm : int, info : NetworkMessageInfo)
+function sendInfo (name : String, netID : int, rpvp : int, rrank : int, rhealth : float, rhealthmax : float, rgm : int, info : PhotonMessageInfo)
 {
-	if (netID == networkView.viewID)
+	pView = gameObject.GetComponent(PhotonView);
+	
+	Debug.Log(netID.ToString() + " " + pView.viewID.ToString());
+	
+	if (netID == pView.viewID)
 	{			
 		if (playerName == "");
 			playerName = name;
@@ -432,8 +439,10 @@ function Update ()
 	var exp;
 	var temppos;
 	var temprot;
-	
-    if (!pView.isMine == true)
+
+	pView = gameObject.GetComponent(PhotonView);
+		
+    if (!pView.isMine)
     {
     	if (gameObject.name != playerName)
     		gameObject.name = playerName;
