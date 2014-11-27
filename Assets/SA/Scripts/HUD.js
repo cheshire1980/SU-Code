@@ -425,7 +425,7 @@ function spawnShip (newpos : Vector3)
 		respawn = Network.Instantiate(phaseMagnum, newpos, Quaternion.identity,0);
 		
 	else if (usrActiveship == "phaseZealot")
-		respawn = Network.Instantiate(phaseZealot, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("phaseZealot", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "phaseSentinel")
 		respawn = Network.Instantiate(phaseSentinel, newpos, Quaternion.identity,0);
@@ -434,7 +434,7 @@ function spawnShip (newpos : Vector3)
 		respawn = Network.Instantiate(shivanInterceptor, newpos, Quaternion.identity,0);
 		
 	else if (usrActiveship == "phaseCrawler")
-		respawn = Network.Instantiate(phaseCrawler, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0).transform;
 
 	respawn.position = newpos;
 	respawn.name = usrAccount;
