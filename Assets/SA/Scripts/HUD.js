@@ -384,57 +384,57 @@ function spawnShip (newpos : Vector3)
 
 	// Trini Ships
 	if (usrActiveship == "a_StarterShip")
-		respawn = Network.Instantiate(association1, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("association1", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "a_TriniArmor")
-		respawn = Network.Instantiate(TriniArmor, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("TriniArmor", newpos, Quaternion.identity,0).transform;
 		
 	else if (usrActiveship == "a_TriniArmorHybrid")
-		respawn = Network.Instantiate(TriniArmorHybrid, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("TriniArmorHybrid", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "a_TriniFighter")
-		respawn = Network.Instantiate(TriniFighter, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("TriniFighter", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "a_TriniFighterHybrid")
-		respawn = Network.Instantiate(TriniFighterHybrid, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("TriniFighterHybrid", newpos, Quaternion.identity,0).transform;
 	
 	// Krul Ships
 	else if (usrActiveship == "KrulArmor")
-		respawn = Network.Instantiate(KrulArmor, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("KrulArmor", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "KrulFighter")
-		respawn = Network.Instantiate(KrulFighter, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("KrulFighter", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "KrulAlloy")
-		respawn = Network.Instantiate(KrulAlloy, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("KrulAlloy", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "KrulFusion")
-		respawn = Network.Instantiate(KrulFusion, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("KrulFusion", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "shivanInterceptor")
-		respawn = Network.Instantiate(shivanInterceptor, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("shivanInterceptor", newpos, Quaternion.identity,0).transform;
 
 	// Phase Ships
 	else if (usrActiveship == "phaseBarricade")
-		respawn = Network.Instantiate(phaseBarricade, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("phaseBarricade", newpos, Quaternion.identity,0).transform;
 		
 	else if (usrActiveship == "phaseCrimson")
-		respawn = Network.Instantiate(phaseCrimson, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("phaseCrimson", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "phaseMagnum")
-		respawn = Network.Instantiate(phaseMagnum, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("phaseMagnum", newpos, Quaternion.identity,0).transform;
 		
 	else if (usrActiveship == "phaseZealot")
 		respawn = PhotonNetwork.Instantiate("phaseZealot", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "phaseSentinel")
-		respawn = Network.Instantiate(phaseSentinel, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("phaseSentinel", newpos, Quaternion.identity,0).transform;
 
 	else if (usrActiveship == "shivanInterceptor")
-		respawn = Network.Instantiate(shivanInterceptor, newpos, Quaternion.identity,0);
+		respawn = PhotonNetwork.Instantiate("shivanInterceptor", newpos, Quaternion.identity,0).transform;
 		
 	else if (usrActiveship == "phaseCrawler")
-		respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0)	.transform;
+		respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0).transform;
 
 	respawn.position = newpos;
 	respawn.name = usrAccount;
