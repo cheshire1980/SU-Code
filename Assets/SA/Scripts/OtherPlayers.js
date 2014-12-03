@@ -61,50 +61,11 @@ function MoveMeRequestNew(MyName:String,ship:String,mtime:float,fwdbk:float,ab:b
 {
 }
 
-/*
+
 @RPC
 function MovePlayer(OPName:String,ship:String,OPx:float,OPy:float,OPz:float,rotation:Quaternion,pvp:int,rank:int,health:float,healthmax:float)
 {
-	usrAccount = PlayerPrefs.GetString("PlayerName");
-	
-	//Debug.Log(OPName + " " + ship);
-	
-	if (OPName != usrAccount)
-	{
-		if (GameObject.Find(OPName) == null)
-		{
-			MakePlayerShip(OPName, ship, rank, health, healthmax);
-		}
-
-		var trans : GameObject = GameObject.Find(OPName);
-		
-		if (trans.tag == "op")
-		{
-			//var bb1 : GameObject = GameObject.Find(OPName);
-			var bbScript1 : OtherPlayersPrefab = trans.GetComponent("OtherPlayersPrefab");
-			bbScript1.rank = rank;
-			bbScript1.health = health;
-			bbScript1.healthmax = healthmax;
-			
-			if (ship != bbScript1.ship)
-			{
-				Destroy(GameObject.Find(OPName));
-				MakePlayerShip(OPName, ship, rank, health, healthmax);
-			}
-				
-			if (pvp == 0)
-			{
-				GameObject.Find(OPName).GetComponentInChildren(TextMesh).renderer.material.SetColor("_Color",Color.white);
-			}
-			else if (pvp == 1)
-				GameObject.Find(OPName).GetComponentInChildren(TextMesh).renderer.material.SetColor("_Color",Color.red);
-			
-			GameObject.Find(OPName).transform.position = Vector3(OPx,OPy,OPz);
-			GameObject.Find(OPName).transform.rotation = rotation;
-		}
-	}
 }
-*/
 
 @RPC
 function MovePlayerNew(OPName:String,gm:int,avatar:String,ship:String,mtime:float,fwdbk:float,lftrt:float,roll:float,rollfwdbk:float,x:float,y:float,z:float,rotation:Quaternion,pvp:int,rank:int,health:float,healthmax:float)

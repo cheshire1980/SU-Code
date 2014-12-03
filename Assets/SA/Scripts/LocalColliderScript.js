@@ -5,6 +5,9 @@ var blasterhit : AudioClip;
 
 var sparks : Transform;
 
+var pView : PhotonView;
+
+
 function Start () {
 
 }
@@ -15,7 +18,9 @@ function Update () {
 
 function OnTriggerEnter(blaster:Collider)
 {
-	if (networkView.isMine)
+	pView = gameObject.GetComponent(PhotonView);
+
+	if (pView.isMine)
 	{
 		var bbScript : BlasterScript = blaster.GetComponent("BlasterScript");
 
@@ -54,7 +59,7 @@ function OnTriggerEnter(blaster:Collider)
 		
 		if (blaster.tag == "npcblaster")
 		{
-			if (networkView.isMine)
+			if (pView.isMine)
 			{
 				var spark1 = Instantiate(sparks, gameObject.transform.position, Quaternion.identity);
 				

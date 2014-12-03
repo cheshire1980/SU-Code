@@ -304,7 +304,7 @@ function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
 
 
 @RPC
-function shipName (name : String, info : NetworkMessageInfo)
+function shipName (name : String)
 {
 	pView = gameObject.GetComponent(PhotonView);
 	
@@ -354,7 +354,7 @@ function remoteExplosion(remoteName : String)
 				{
 					temprot = gameObject.transform.rotation;
 					temppos = gameObject.transform.position;
-					Network.RemoveRPCs(networkView.viewID);
+					PhotonNetwork.RemoveRPCs(pView);
 					GameObject.Destroy(gameObject);
 					exp = Instantiate(explosion,temppos,temprot);
 				}
@@ -372,8 +372,9 @@ function remoteExplosion(remoteName : String)
 				{
 					temprot = gameObject.transform.rotation;
 					temppos = gameObject.transform.position;
-					Network.RemoveRPCs(networkView.viewID);
-					Network.Destroy(gameObject);
+					PhotonNetwork.RemoveRPCs(pView);
+					//PhotonNetwork.Destroy(gameObject);
+					GameObject.Destroy(gameObject);
 					exp = Instantiate(explosion,temppos,temprot);
 				}
 			}
@@ -390,7 +391,7 @@ function removePlayer(remoteName : String)
 		{
 			if (gameObject != null)
 			{
-				Network.RemoveRPCs(networkView.viewID);
+				PhotonNetwork.RemoveRPCs(pView);
 				GameObject.Destroy(gameObject);
 			}
 		}
@@ -402,8 +403,8 @@ function removePlayer(remoteName : String)
 		{
 			if (gameObject != null)
 			{
-				Network.RemoveRPCs(networkView.viewID);
-				Network.Destroy(gameObject);
+				PhotonNetwork.RemoveRPCs(pView);
+				PhotonNetwork.Destroy(gameObject);
 			}
 		}
 	}
@@ -411,7 +412,7 @@ function removePlayer(remoteName : String)
 
 function rPlayer(name)
 {
-	networkView.RPC ("removePlayer", RPCMode.AllBuffered, name);
+	pView.RPC ("removePlayer", PhotonTargets.AllBuffered, name);
 }
 
 function clearInst (viewPos : Vector3, viewID : NetworkViewID)
@@ -425,14 +426,21 @@ function clearInstantiate (viewPos : Vector3, viewID : NetworkViewID, info : Net
 	if (Network.isServer)
 	{
 		networkView.RPC ("remoteExplosion", RPCMode.All, viewPos);
-		//Network.RemoveRPCs(viewID);
-		//Network.DestroyPlayerObjects(info.sender);
+		//PhotonNetwork.RemoveRPCs(viewID);
+		//PhotonNetwork.DestroyPlayerObjects(info.sender);
 	}
 	else
 	{
 		networkView.RPC ("clearInstantiate", RPCMode.Server, viewPos, viewID);
 	}
 }
+
+@RPC
+function Shoot(Name:String,Power:float,Pvp:int,Target:String)
+{
+	Camera.main.GetComponent(HUD).Shoot(Name, Power, Pvp, Target);
+}
+
 
 function Update ()
 {
@@ -457,10 +465,10 @@ function Update ()
 			{
 				temprot = gameObject.transform.rotation;
 				temppos = gameObject.transform.position;
-    			Network.RemoveRPCs(networkView.viewID);
+    			PhotonNetwork.RemoveRPCs(pView);
     			GameObject.Destroy(gameObject);
 				exp = Instantiate(explosion,temppos,temprot);
-				networkView.RPC ("remoteExplosion",RPCMode.AllBuffered, playerName);
+				pView.RPC ("remoteExplosion",PhotonTargets.All, playerName);
 			}
 		}
 	}

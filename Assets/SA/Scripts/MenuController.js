@@ -6,7 +6,7 @@ static var filePath = "sudata.dat";
 var header : Texture;
 var headerlogo : Texture;
 
-static var version : int = 06102014;
+static var version : int = 12022014;
 var mySkin : GUISkin;
 var mySkin2 : GUISkin;
 
@@ -63,6 +63,7 @@ static var sDisco = false;
 static var phase1 = false;
 static var phase2 = false;
 static var phase3 = false;
+static var phase4 = false;
 
 private var windowRect = Rect (Screen.width/2-350/2, Screen.height/2-480/2, 350, 480);
 
@@ -188,7 +189,8 @@ function Start()
 	if (Application.platform == RuntimePlatform.Android)
 	{
 		windowRect = Rect (960/2-350/2, 600/2-480/2, 350, 480);
-		Screen.SetResolution (960, 600, true);
+		//Screen.SetResolution (960, 600, true);
+		Screen.SetResolution (1280, 720, true);
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 	}
 }
@@ -227,11 +229,13 @@ function OnGUI()
 		GameObject.Find("Info").GetComponent(UILabel).text = "Disconnected from the server!!";
 
 	if (phase1)
-		GameObject.Find("Info").GetComponent(UILabel).text = "Connecting to server ...";
+		GameObject.Find("Info").GetComponent(UILabel).text = "Connecting to login server ...";
 	if (phase2)
-		GameObject.Find("Info").GetComponent(UILabel).text = "Connected, sent login info & waiting for response from server ...";
+		GameObject.Find("Info").GetComponent(UILabel).text = "Checking login credentials ...";
 	if (phase3)
-		GameObject.Find("Info").GetComponent(UILabel).text = "Received server response, loading scene, please wait ...";
+		GameObject.Find("Info").GetComponent(UILabel).text = "Login accepted, logging into game server ...";
+	if (phase4)
+		GameObject.Find("Info").GetComponent(UILabel).text = "Loading scene ...";
 
 	ErrorTriggerNotLoggedIn = false;
 	ErrorTriggerAccountCreated = false;
@@ -507,6 +511,12 @@ function enableLogin()
 
 function OnJoinedLobby ()
 {
+	phase1 = false;
+	phase2 = false;
+	phase3 = false;
+	phase4 = true;
+	GameObject.Find("Info").GetComponent(UILabel).text = "Loading scene ...";
+	
 	Debug.Log("Entered this function test");
 	
 	//PhotonNetwork.JoinRoom("main");
@@ -546,7 +556,8 @@ function LoggedIn(Name:String,location:Vector3,gm:int,rank:int,experience:float,
 	phase1 = false;
 	phase2 = false;
 	phase3 = true;
-	GameObject.Find("Info").GetComponent(UILabel).text = "Received server response, loading scene, please wait ...";
+	//GameObject.Find("Info").GetComponent(UILabel).text = "Received server response, loading scene, please wait ...";
+	GameObject.Find("Info").GetComponent(UILabel).text = "Login accepted, logging into game server ...";
 	
     //var sw : StreamWriter = new StreamWriter(filePath);
     #if !UNITY_WEBPLAYER

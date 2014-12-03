@@ -1,0 +1,119 @@
+Hi there, thank you for choosing "inLogin". 
+
+If you are using PlayMaker, just unzip the "PlayMakerExemple_Actions" files in "inLogin/PlayMaker/..."
+
+
+If you have Questions or Trouble with the plugin, 
+you can email me at info@enrickdev.com
+
+If you like the plugin, you can leave a review on the asset store :)
+
+
+
+
+== FOLLOW THE STEP BELLOW (PlayMaker user too) ==
+
+
+
+**** STEP 1 ***********************
+
+(In your CPannel - WEBSERVER / HOSTING SERVER)
+
+
+-> Create your online database named "Accounts"
+
+ (You can use this SQL Query bellow or import this file "inLogin\OUTSIDE_OF_UNITY\DATABASE\Accounts.sql")
+
+
+    SQL QUERY:
+
+    SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+CREATE TABLE IF NOT EXISTS `Accounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` text NOT NULL,
+  `password` text NOT NULL,
+  `money` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+
+
+
+
+**** STEP 2 ***********************
+
+(In PHP)
+
+
+Change DATABASE SETTINGS and the UNITY HASHCODE in "inLogin\OUTSIDE_OF_UNITY\PHP files\SecurityDBsettings.php"
+
+-> Enter your HOST, USERNAME, PASSWORD, DATABASE NAME, UNITY HASHCODE and your GAME VERSION
+
+    ? For the UNITY HASHCODE, just choose random character (it for security)
+
+
+
+-> Put the 2 PHP files ONLINE
+
+
+
+
+
+**** STEP 3 ***********************
+
+    
+    
+    
+    
+(In Unity)
+"inLogin\Scripts\global.cs" 
+    
+
+-> UPDATE YOUR UNITY HASHCODE (same as your PHP page)
+
+	Variable  ->  gameHashCode (line 9)
+	
+	
+-> UPDATE YOUR GAME VERSION (same as your PHP page)
+
+    Variable  ->  gameVersion (line 12)
+	
+	
+-> UPDATE the LOGIN/REGISTER URL 
+
+    Variable  ->  URL_loginRegister (line 16)
+    
+
+-> UPDATE the GET/SET URL 
+
+    Variable  ->  URL_GetSetVariable (line 19)
+    
+
+
+
+
+
+
+**** STEP 4 ***********************
+
+
+-> Open the SCENE named "inLogin_loginScene" and Try It!!!
+
+-> PLAYMAKER USER: Open the SCENE named "inLogin_PlayMaker_Exemple" and Try It!!!
+
+
+
+*You can access to the player name with (global.username) (string)
+and the player state with (global.playerState) (string)
+
+
+    ENJOY!!
+
+
+
+
+
+
+

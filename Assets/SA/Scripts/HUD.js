@@ -226,6 +226,9 @@ var newsWindow : GameObject;
 var discoWindow : GameObject;
 var helpWindow : GameObject;
 
+var pView : PhotonView;
+
+
 @RPC
 function instantiateShip (shipspawn : String, newpos : Vector3) {}
 
@@ -380,72 +383,75 @@ function enterSpace ()
 
 function spawnShip (newpos : Vector3)
 {
-	var respawn : Transform;
+	if (GameObject.Find(usrAccount) == null)
+	{
+		var respawn : Transform;
 
-	// Trini Ships
-	if (usrActiveship == "a_StarterShip")
-		respawn = PhotonNetwork.Instantiate("association1", newpos, Quaternion.identity,0).transform;
+		// Trini Ships
+		if (usrActiveship == "a_StarterShip")
+			respawn = PhotonNetwork.Instantiate("rassociation1", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "a_TriniArmor")
-		respawn = PhotonNetwork.Instantiate("TriniArmor", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "a_TriniArmor")
+			respawn = PhotonNetwork.Instantiate("TriniArmor", newpos, Quaternion.identity,0).transform;
+			
+		else if (usrActiveship == "a_TriniArmorHybrid")
+			respawn = PhotonNetwork.Instantiate("TriniArmorHybrid", newpos, Quaternion.identity,0).transform;
+
+		else if (usrActiveship == "a_TriniFighter")
+			respawn = PhotonNetwork.Instantiate("TriniFighter", newpos, Quaternion.identity,0).transform;
+
+		else if (usrActiveship == "a_TriniFighterHybrid")
+			respawn = PhotonNetwork.Instantiate("TriniFighterHybrid", newpos, Quaternion.identity,0).transform;
 		
-	else if (usrActiveship == "a_TriniArmorHybrid")
-		respawn = PhotonNetwork.Instantiate("TriniArmorHybrid", newpos, Quaternion.identity,0).transform;
+		// Krul Ships
+		else if (usrActiveship == "KrulArmor")
+			respawn = PhotonNetwork.Instantiate("KrulArmor", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "a_TriniFighter")
-		respawn = PhotonNetwork.Instantiate("TriniFighter", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "KrulFighter")
+			respawn = PhotonNetwork.Instantiate("KrulFighter", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "a_TriniFighterHybrid")
-		respawn = PhotonNetwork.Instantiate("TriniFighterHybrid", newpos, Quaternion.identity,0).transform;
-	
-	// Krul Ships
-	else if (usrActiveship == "KrulArmor")
-		respawn = PhotonNetwork.Instantiate("KrulArmor", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "KrulAlloy")
+			respawn = PhotonNetwork.Instantiate("KrulAlloy", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "KrulFighter")
-		respawn = PhotonNetwork.Instantiate("KrulFighter", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "KrulFusion")
+			respawn = PhotonNetwork.Instantiate("KrulFusion", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "KrulAlloy")
-		respawn = PhotonNetwork.Instantiate("KrulAlloy", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "shivanInterceptor")
+			respawn = PhotonNetwork.Instantiate("shivanInterceptor", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "KrulFusion")
-		respawn = PhotonNetwork.Instantiate("KrulFusion", newpos, Quaternion.identity,0).transform;
+		// Phase Ships
+		else if (usrActiveship == "phaseBarricade")
+			respawn = PhotonNetwork.Instantiate("phaseBarricade", newpos, Quaternion.identity,0).transform;
+			
+		else if (usrActiveship == "phaseCrimson")
+			respawn = PhotonNetwork.Instantiate("phaseCrimson", newpos, Quaternion.identity,0).transform;
 
-	else if (usrActiveship == "shivanInterceptor")
-		respawn = PhotonNetwork.Instantiate("shivanInterceptor", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "phaseMagnum")
+			respawn = PhotonNetwork.Instantiate("phaseMagnum", newpos, Quaternion.identity,0).transform;
+			
+		else if (usrActiveship == "phaseZealot")
+			respawn = PhotonNetwork.Instantiate("phaseZealot", newpos, Quaternion.identity,0).transform;
 
-	// Phase Ships
-	else if (usrActiveship == "phaseBarricade")
-		respawn = PhotonNetwork.Instantiate("phaseBarricade", newpos, Quaternion.identity,0).transform;
+		else if (usrActiveship == "phaseSentinel")
+			respawn = PhotonNetwork.Instantiate("phaseSentinel", newpos, Quaternion.identity,0).transform;
+
+		else if (usrActiveship == "shivanInterceptor")
+			respawn = PhotonNetwork.Instantiate("shivanInterceptor", newpos, Quaternion.identity,0).transform;
+			
+		else if (usrActiveship == "phaseCrawler")
+			respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0).transform;
+
+		respawn.position = newpos;
+		respawn.name = usrAccount;
+		respawn.tag = "Player";
+		PlayerShip = GameObject.Find(usrAccount);
 		
-	else if (usrActiveship == "phaseCrimson")
-		respawn = PhotonNetwork.Instantiate("phaseCrimson", newpos, Quaternion.identity,0).transform;
-
-	else if (usrActiveship == "phaseMagnum")
-		respawn = PhotonNetwork.Instantiate("phaseMagnum", newpos, Quaternion.identity,0).transform;
-		
-	else if (usrActiveship == "phaseZealot")
-		respawn = PhotonNetwork.Instantiate("phaseZealot", newpos, Quaternion.identity,0).transform;
-
-	else if (usrActiveship == "phaseSentinel")
-		respawn = PhotonNetwork.Instantiate("phaseSentinel", newpos, Quaternion.identity,0).transform;
-
-	else if (usrActiveship == "shivanInterceptor")
-		respawn = PhotonNetwork.Instantiate("shivanInterceptor", newpos, Quaternion.identity,0).transform;
-		
-	else if (usrActiveship == "phaseCrawler")
-		respawn = PhotonNetwork.Instantiate("phaseCrawler", newpos, Quaternion.identity,0).transform;
-
-	respawn.position = newpos;
-	respawn.name = usrAccount;
-	respawn.tag = "Player";
-	PlayerShip = GameObject.Find(usrAccount);
-	
-	//enterSpace();
+		//enterSpace();
+	}
 }
 
 function Start ()
-{	
+{
 	mm = GameObject.Find("MiniMap");
 	
 	usrAccount = PlayerPrefs.GetString("PlayerName");
@@ -477,6 +483,9 @@ function Start ()
 	usrsmCurrent = PlayerPrefs.GetInt("PlayerSMCurrent");
 	
 	var ta = PlayerPrefs.GetInt("PlayerActivator");
+	
+	//pView = GameObject.Find(usrAccount).GetComponent(PhotonView);
+	
 	
 	if (ta == 0)
 		installedactivator = false;
@@ -844,6 +853,8 @@ function Update () {
 
 function OnDisconnectedFromServer(info : NetworkDisconnection)
 {
+	PhotonNetwork.Disconnect();
+	
 	MenuController.phase1 = false;
 	MenuController.phase2 = false;
 	MenuController.phase3 = false;
@@ -1245,7 +1256,17 @@ function OnGUI()
 						{
 							tBlasterTrigger = true;
 							tBlasterWaitTime = Time.fixedTime;
-							networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
+							//networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
+							pView = GameObject.Find(usrAccount).GetComponent(PhotonView);
+							pView.RPC("Shoot", PhotonTargets.All, usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
+							
+							// Manual shoot locally
+							/*tBlasterWaitTime = Time.fixedTime;
+							tBlasterTriggerServer = true;
+							
+							TriggerLocalBlasters = true;
+							blast11 = true;
+							usrEnergy = usrEnergy - float.Parse(usrBlasterPower.ToString());*/
 						}
 					}
 				}
@@ -1367,7 +1388,17 @@ function OnGUI()
 					{
 						tBlasterTrigger = true;
 						tBlasterWaitTime = Time.fixedTime;
-						networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
+						//networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
+						pView = GameObject.Find(usrAccount).GetComponent(PhotonView);
+						pView.RPC("Shoot", PhotonTargets.All, usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
+						
+						// Manual shoot locally
+						/*tBlasterWaitTime = Time.fixedTime;
+						tBlasterTriggerServer = true;
+						
+						TriggerLocalBlasters = true;
+						blast11 = true;
+						usrEnergy = usrEnergy - float.Parse(usrBlasterPower.ToString());*/
 					}
 				}
 			}

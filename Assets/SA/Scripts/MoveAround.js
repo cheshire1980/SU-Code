@@ -793,7 +793,11 @@ function FixedUpdate()
 			{
 				HUD.tBlasterTrigger = true;
 				HUD.tBlasterWaitTime = Time.fixedTime;
-				Camera.main.networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,HUD.usrBlasterPower,HUD.usrPvp,SelectedTarget);
+				//Camera.main.networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,HUD.usrBlasterPower,HUD.usrPvp,SelectedTarget);
+				
+				var pView : PhotonView;
+				pView = GameObject.Find(usrAccount).GetComponent(PhotonView);
+				pView.RPC("Shoot", PhotonTargets.All, usrAccount,HUD.usrBlasterPower,HUD.usrPvp,SelectedTarget);
 			}
 		}
 	}

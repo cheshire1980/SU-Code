@@ -8,5 +8,6 @@ function cancelDisco ()
 function proceedDisco ()
 {
 	GameObject.Find("UI Root/UI_Disco/Disco").SetActive(false);
+	PhotonNetwork.Disconnect();
 	Network.Disconnect();
 }
