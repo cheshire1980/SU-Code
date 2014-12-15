@@ -8,24 +8,28 @@ private var sentryLife : float = 60.0;
 var sentryTimer : float;
 var sentryLifeTimer : float;
 
+var pView : PhotonView;
+
 function Start ()
 {
+	pView = gameObject.GetComponent(PhotonView);
+	
 	sentryTimer = Time.fixedTime;
 	sentryLifeTimer = Time.fixedTime;
 }
 
-function shootSentry()
+function shootSentry(target : Transform)
 {
-	if (networkView.isMine)
+	if (pView.isMine)
 	{
-		var sentryBlaster1 = Network.Instantiate(blasterPrefab, transform.Find("sentry/group/BlasterSpawn1").position, Quaternion.identity, 0);
-		var sentryBlaster2 = Network.Instantiate(blasterPrefab, transform.Find("sentry/group/BlasterSpawn2").position, Quaternion.identity, 0);
+		var sentryBlaster1 = PhotonNetwork.Instantiate("blasterSentry", transform.Find("sentry/group/BlasterSpawn1").position, transform.Find("sentry/group").rotation, 0);
+		var sentryBlaster2 = PhotonNetwork.Instantiate("blasterSentry", transform.Find("sentry/group/BlasterSpawn2").position, transform.Find("sentry/group").rotation, 0);
 			
 		sentryBlaster1.transform.rotation = transform.Find("sentry/group").rotation;
 		sentryBlaster2.transform.rotation = transform.Find("sentry/group").rotation;
 		
-		sentryBlaster1.transform.Rotate(Vector3(0,90,0));
-		sentryBlaster2.transform.Rotate(Vector3(0,90,0));
+		//sentryBlaster1.transform.Rotate(Vector3(0,90,0));
+		//sentryBlaster2.transform.Rotate(Vector3(0,90,0));
 		
 		sentryBlaster1.tag = "myblaster";
 		sentryBlaster2.tag = "myblaster";
@@ -37,15 +41,16 @@ function shootSentry()
 		bbScript = sentryBlaster2.GetComponent("BlasterScript");
 		bbScript.power = HUD.usrBlasterPower / 2;
 		bbScript.sentryBlaster = true;
+		bbScript.target = target;
 
-		sentryBlaster1.rigidbody.AddForce(sentryBlaster1.transform.forward * 2000);
-		sentryBlaster2.rigidbody.AddForce(sentryBlaster2.transform.forward * 2000);
+		//sentryBlaster1.rigidbody.AddForce(sentryBlaster1.transform.forward * 2000);
+		//sentryBlaster2.rigidbody.AddForce(sentryBlaster2.transform.forward * 2000);
 	}
 }
 
 function Update ()
 {
-	if (networkView.isMine)
+	if (pView.isMine)
 	{
 	    var objectsInRange : Collider[] = Physics.OverlapSphere(transform.position, 15);
 	    for (var col : Collider in objectsInRange)
@@ -56,12 +61,12 @@ function Update ()
 	            if (col.tag == "npc")
 	            {
 	            	transform.Find("sentry/group").LookAt(col.transform);
-	            	transform.Find("sentry/group").Rotate(Vector3(0,-90,0));
+	            	//transform.Find("sentry/group").Rotate(Vector3(0,-90,0));
 	            	
 	            	if (Time.fixedTime - sentryTimer >= sentryInverval)
 	            	{
 	            		sentryTimer = Time.fixedTime;
-	 	           		shootSentry();
+	 	           		shootSentry(col.transform);
 	 	           	}
 					//npc.AddDamage(power);
 				}
@@ -72,12 +77,12 @@ function Update ()
 						if (col.GetComponent(PlayerMovement).pvp == 1)
 						{
 			            	transform.Find("sentry/group").LookAt(col.transform);
-			            	transform.Find("sentry/group").Rotate(Vector3(0,-90,0));
+			            	//transform.Find("sentry/group").Rotate(Vector3(0,-90,0));
 			            	
 			            	if (Time.fixedTime - sentryTimer >= sentryInverval)
 			            	{
 			            		sentryTimer = Time.fixedTime;
-			 	           		shootSentry();
+			 	           		shootSentry(col.transform);
 			 	           	}
 						}
 					}
@@ -104,8 +109,10 @@ function Update ()
 				}
 			}
 			
-			var exp = Network.Instantiate(explosion, transform.position, Quaternion.identity,0);
-			Network.Destroy(networkView.viewID);
+			var exp = PhotonNetwork.Instantiate("explosion", transform.position, Quaternion.identity,0);
+			PhotonNetwork.RemoveRPCs(pView);
+			PhotonNetwork.Destroy(gameObject);
+			PhotonNetwork.RemoveRPCs(pView);
 			exp.tag = "rocket";
 			
 			//Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);

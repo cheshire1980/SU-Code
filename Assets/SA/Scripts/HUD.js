@@ -67,6 +67,7 @@ static var sHealthMax : float;
 static var sHealthPercent : float;
 
 static var usrAccount = "";
+static var usrPassword = "";
 static var usrGM : int;
 static var usrAvatar = "";
 static var usrPvp = 0;
@@ -83,6 +84,7 @@ static var usrModules : int;
 
 static var usrRockets : int;
 static var usrSentries : int;
+static var usrShields : int;
 
 static var usrHealth : float = 20.0000;
 static var usrHealthMax : float = 20.0000;
@@ -228,6 +230,12 @@ var helpWindow : GameObject;
 
 var pView : PhotonView;
 
+var uiData : WWW;
+var reqData : WWW;
+
+var updateTimer : float;
+
+var purchasePacks : String;
 
 @RPC
 function instantiateShip (shipspawn : String, newpos : Vector3) {}
@@ -235,13 +243,16 @@ function instantiateShip (shipspawn : String, newpos : Vector3) {}
 @RPC
 function useSentries ()
 {
-	Camera.main.networkView.RPC ("useSentries", RPCMode.Server);
+	//Camera.main.networkView.RPC ("useSentries", RPCMode.Server);
+	usrSentries--;
 }
 
 @RPC
 function requestSentries ()
 {
-	Camera.main.networkView.RPC ("requestSentries", RPCMode.Server);
+	//Camera.main.networkView.RPC ("requestSentries", RPCMode.Server);
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb&sentries");
+	yield reqData;
 }
 
 @RPC
@@ -253,13 +264,16 @@ function amountSentries (amount : int)
 @RPC
 function useRockets ()
 {
-	Camera.main.networkView.RPC ("useRockets", RPCMode.Server);
+	//Camera.main.networkView.RPC ("useRockets", RPCMode.Server);
+	usrRockets--;
 }
 
 @RPC
 function requestRockets ()
 {
-	Camera.main.networkView.RPC ("requestRockets", RPCMode.Server);
+	//Camera.main.networkView.RPC ("requestRockets", RPCMode.Server);
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb&rockets");
+	yield reqData;
 }
 
 @RPC
@@ -319,7 +333,9 @@ function Azurite (amount : int)
 @RPC
 function requestModules ()
 {
-	Camera.main.networkView.RPC ("requestModules", RPCMode.Server);
+	//Camera.main.networkView.RPC ("requestModules", RPCMode.Server);
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb&modules");
+	yield reqData;
 }
 
 @RPC
@@ -386,6 +402,7 @@ function spawnShip (newpos : Vector3)
 	if (GameObject.Find(usrAccount) == null)
 	{
 		var respawn : Transform;
+		PhotonNetwork.playerName = usrAccount;
 
 		// Trini Ships
 		if (usrActiveship == "a_StarterShip")
@@ -452,9 +469,13 @@ function spawnShip (newpos : Vector3)
 
 function Start ()
 {
+	PlayerPrefs.SetString("purchasePacks", "0");
+	purchasePacks = "0";
+	
 	mm = GameObject.Find("MiniMap");
 	
 	usrAccount = PlayerPrefs.GetString("PlayerName");
+	usrPassword = PlayerPrefs.GetString("PlayerPassword");
 	usrGM = PlayerPrefs.GetInt("PlayerGM");
 	
 	var pos : Vector3 = Vector3(PlayerPrefs.GetFloat("PlayerX"),PlayerPrefs.GetFloat("PlayerY"),PlayerPrefs.GetFloat("PlayerZ"));
@@ -536,7 +557,9 @@ function Start ()
 
 	PhotonNetwork.SetSendingEnabled(0, true);
 	PhotonNetwork.isMessageQueueRunning = true;
+	PhotonNetwork.playerName = usrAccount;
 	PhotonNetwork.CreateRoom("main");
+	PhotonNetwork.playerName = usrAccount;
 	//PhotonNetwork.JoinRoom("main");
 	
 	//"PlayerShip";
@@ -552,6 +575,7 @@ function Start ()
 	addSkills();
 	//enterSpace();
 	
+	/* Been superseeded by new Photon Network code
 	requestMemberships();
 	requestMinerals();
 	requestAmber();
@@ -562,7 +586,16 @@ function Start ()
 	
 	requestNews();
 	requestShipName();
-	requestISSpecialEvent();
+	requestISSpecialEvent();*/
+	
+	requestStartData();
+}
+
+function requestStartData ()
+{
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb" + 
+					"&memberships&minerals&amber&azurite&modules&rockets&sentries");
+	yield reqData;
 }
 
 function OnPhotonCreateRoomFailed()
@@ -590,6 +623,7 @@ function OnJoinedRoom()
 	
 	// Boost Specs with skills
 	addSkills();
+	updateTimer = Time.fixedTime;
 	//enterSpace();
 	
 	requestMemberships();
@@ -611,7 +645,37 @@ function FixedUpdate ()
 	GameObject.Find("UI Root/UI_ChatAnchor/UI_Chat/Scroll/Grid").GetComponent(UITable).repositionNow = true;
 }
 
-function Update () {
+function updateDBTimer ()
+{
+	if (GameObject.Find(usrAccount) != null)
+	{
+		var tpos : Vector3 = GameObject.Find(usrAccount).transform.position;
+		
+		var req2Data = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+					"&x=" + tpos.x + "&y=" + tpos.y + "&z=" + tpos.z + "&activeshiphealth=" + usrHealth +
+					"&activeshiprockets=" + usrRockets + "&activeshipsentries=" + usrSentries + "&activeshipshields" + usrShields);
+	}
+}
+
+function Update ()
+{
+	// Check to see if a pack was purchased
+	purchasePacks = PlayerPrefs.GetString("purchasePacks");
+	if (purchasePacks != "0")
+	{
+		PurchaseRequest(purchasePacks);
+		PlayerPrefs.SetString("purchasePacks","0");
+		purchasePacks = "0";
+	}
+	
+	// New update timer
+	if (Time.fixedTime - updateTimer >= 10)
+	{
+		//Debug.Log("SENDING DATA");
+		updateDBTimer();
+		updateTimer = Time.fixedTime;
+	}
+
 	// Screenshot Toggle
 	if (Input.GetButtonDown("f11"))
 	{
@@ -668,7 +732,7 @@ function Update () {
 			usrExperience = 0;
 			usrExperienceMax = usrExperienceMax + (usrExperienceMax / 2);
 			//usrExperienceMax = usrExperienceMax * 2;
-			networkView.RPC("RankExpUpdate",RPCMode.Server,usrAccount,usrRank,usrExperience,usrExperienceMax);
+			RankExpUpdate(usrAccount,usrRank,usrExperience,usrExperienceMax);
 			
 			// Turn on Visuals
 			var tempGO2 : Transform = GameObject.Find(usrAccount).transform;
@@ -821,7 +885,10 @@ function Update () {
 					if (Vector3.Distance(GameObject.Find(usrAccount).transform.position,GameObject.Find(c.name).transform.position) <= 15)
 					{
 						//var bbScript : BloodstoneScript = GameObject.Find(c.name).GetComponent("BloodstoneScript");
-						Camera.main.networkView.RPC("CollectBloodstone",RPCMode.Server,usrAccount,c.name,bbScript.amount);
+						CollectBloodstone(usrAccount,c.name,bbScript.amount);
+						rBSui(usrBloodstone);
+						
+						//ReceiveBloodstone(usrAccount,c.name,bbScript.amount);
 						bbScript.autotagged = true;
 					}
 				}
@@ -830,6 +897,101 @@ function Update () {
 	}
 	
 
+	// Code for updateinfo
+	if (uiData != null)
+	{
+		if (uiData.isDone)
+		{
+			var iBuffer = uiData.text.Split(";"[0]);
+			var i0 : int = int.Parse(iBuffer[0]);
+			var i1 : int = int.Parse(iBuffer[1]);
+			var i2 : float = float.Parse(iBuffer[2]);
+			var i3 : float = float.Parse(iBuffer[3]);
+			var i4 : float = float.Parse(iBuffer[4]);
+			var i5 : float = float.Parse(iBuffer[5]);
+			var i6 : int = int.Parse(iBuffer[6]);
+			var i7 : int = int.Parse(iBuffer[7]);
+			var i8 : int = int.Parse(iBuffer[8]);
+			var i9 : int = int.Parse(iBuffer[9]);
+			var i10 : int = int.Parse(iBuffer[10]);
+			var i11 : float = float.Parse(iBuffer[11]);
+			var i12 : float = float.Parse(iBuffer[12]);
+			uiData = null;
+			
+			UpdateInfo(i0,i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12);
+		}
+	}
+	
+	if (reqData != null)
+	{
+		if (reqData.isDone)
+		{
+			var iBuff = reqData.text.Split("|"[0]);
+			
+			for (var k = 0; k < iBuff.Length - 1; k++)
+			{
+				var newBuff = iBuff[k];
+				var splitBuff = newBuff.Split("="[0]);
+				
+				if (splitBuff[1] == null)
+					splitBuff[1] = "0";
+				
+				if (splitBuff[0] == "memberships")
+				{
+					var tmpsplitBuff = splitBuff[1];
+					var split2Buff = tmpsplitBuff.Split("+"[0]);
+					
+					var dat1 : int = int.Parse(split2Buff[0].ToString());
+					var dat2 : String = split2Buff[1].ToString();
+					var dat3 : int = int.Parse(split2Buff[2].ToString());
+					var dat4 : String = split2Buff[3].ToString();
+					
+					Memberships(dat1,dat2,dat3,dat4);
+				}
+				
+				if (splitBuff[0] == "minerals")
+					usrMinerals = int.Parse(splitBuff[1].ToString());
+					
+				if (splitBuff[0] == "amber")
+					usrAmber = int.Parse(splitBuff[1].ToString());
+					
+				if (splitBuff[0] == "azurite")
+					usrAzurite = int.Parse(splitBuff[1].ToString());
+					
+				if (splitBuff[0] == "modules")
+					usrModules = int.Parse(splitBuff[1].ToString());
+					
+				if (splitBuff[0] == "rockets")
+					usrRockets = int.Parse(splitBuff[1].ToString());
+					
+				if (splitBuff[0] == "sentries")
+					usrSentries = int.Parse(splitBuff[1].ToString());
+					
+				/* Been superseeded by new Photon Network code
+				requestMemberships();
+				requestMinerals();
+				requestAmber();
+				requestAzurite();
+				requestModules();
+				requestRockets();
+				requestSentries();
+				
+				requestNews();
+				requestShipName();
+				requestISSpecialEvent();*/
+			}
+			
+			reqData = null;
+		}
+	}
+}
+
+function rBSui (amount : int)
+{
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb&bloodstone=" + amount);
+	yield uiData;
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + usrAccount + "&password=" + usrPassword + "&updateinfo");
+	yield uiData;
 }
 
 /*function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo)
@@ -1257,7 +1419,7 @@ function OnGUI()
 							tBlasterTrigger = true;
 							tBlasterWaitTime = Time.fixedTime;
 							//networkView.RPC("ShootRequest",RPCMode.Server,usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
-							pView = GameObject.Find(usrAccount).GetComponent(PhotonView);
+							pView = Camera.main.GetComponent(PhotonView);
 							pView.RPC("Shoot", PhotonTargets.All, usrAccount,usrBlasterPower,usrPvp,MoveAround.SelectedTarget);
 							
 							// Manual shoot locally
@@ -1303,14 +1465,14 @@ function OnGUI()
 						{
 							requestAlienMode(false);
 							useRockets();
-							Network.Instantiate(station, GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
+							PhotonNetwork.Instantiate("Rocket1", GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
 						}
 						
 						else if (usesSentry() == true && usrSentries > 0)
 						{
 							requestAlienMode(false);
 							useSentries();
-							Network.Instantiate(phaseSentry, GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
+							PhotonNetwork.Instantiate("phaseSentry", GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
 						}
 					}
 				}
@@ -1428,7 +1590,7 @@ function OnGUI()
 					{
 						requestAlienMode(false);
 						useRockets();
-						Network.Instantiate(station, GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
+						PhotonNetwork.Instantiate("Rocket1", GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
 					}
 				}
 			}
@@ -1440,7 +1602,7 @@ function OnGUI()
 					{
 						requestAlienMode(false);
 						useSentries();
-						Network.Instantiate(phaseSentry, GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
+						PhotonNetwork.Instantiate("phaseSentry", GameObject.Find(usrAccount + "/BlasterSpawn").transform.position, Quaternion.identity,0);
 					}
 				}
 			}
@@ -1647,19 +1809,55 @@ function HealthUpdate(Name:String,Health:float,HealthMax:float)
 	}*/
 }
 
-@RPC
+/*@RPC
 function HitNPCRequest(name:String,Nname:String,power:float)
 {
+}*/
+@RPC
+function HitNPCRequest(name:String,Nname:String,power:float,info:PhotonMessageInfo)
+{
+	Debug.Log("HIT FUCKER");
+	//hitNPC(Nname,power,info);
+	
+	if (Camera.main.GetComponent(npcLZzone).spawndownMode == false)
+		Camera.main.GetComponent(npcLZzone).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcTrinizone2).spawndownMode == false)
+		Camera.main.GetComponent(npcTrinizone2).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcTrinizone3).spawndownMode == false)
+		Camera.main.GetComponent(npcTrinizone3).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcTrinizone4).spawndownMode == false)
+		Camera.main.GetComponent(npcTrinizone4).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcBossTrinizone5).spawndownMode == false)
+		Camera.main.GetComponent(npcBossTrinizone5).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcKrulzone1).spawndownMode == false)
+		Camera.main.GetComponent(npcKrulzone1).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcKrulzone2).spawndownMode == false)
+		Camera.main.GetComponent(npcKrulzone2).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcKrulzone3).spawndownMode == false)
+		Camera.main.GetComponent(npcKrulzone3).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcKrulzone4).spawndownMode == false)
+		Camera.main.GetComponent(npcKrulzone4).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcKrulzone5).spawndownMode == false)
+		Camera.main.GetComponent(npcKrulzone5).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcKrulzone6).spawndownMode == false)
+		Camera.main.GetComponent(npcKrulzone6).hitNPC(Nname + "S",power,info);
+	if (Camera.main.GetComponent(npcLuntazone1).spawndownMode == false)
+		Camera.main.GetComponent(npcLuntazone1).hitNPC(Nname + "S",power,info);
+	
 }
 
 @RPC
 function RankExpUpdate(name:String,rank:int,experience:float,experiencemax:float)
 {
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+				"&rank=" + rank + "&experience=" + experience + "&experiencemax=" + experiencemax);
 }
 
 @RPC
 function CollectBloodstone(name:String,Bname:String,amount:int)
 {
+	usrBloodstone = usrBloodstone + amount;
+	ReceiveBloodstone(usrAccount,Bname,usrBloodstone);
 }
 
 @RPC
@@ -1692,6 +1890,15 @@ function ReceiveBloodstone(name:String,Bname:String,amount:int)
 @RPC
 function collectModule ()
 {
+	usrModules = usrModules + 1;
+	rMui (usrModules);
+}
+
+function rMui (amount : int)
+{
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb&modules=" + amount);
+	yield uiData;
+	requestModules();
 }
 
 @RPC
@@ -1827,7 +2034,8 @@ function KillNPC(Nname:String,tf:boolean,amount:int,Bname:String)
 				
 				var exp = Instantiate(explosion,tObj.transform.position,tObj.transform.rotation);
 
-				networkView.RPC("RankExpUpdate",RPCMode.Server,usrAccount,usrRank,usrExperience,usrExperienceMax);
+				
+				RankExpUpdate(usrAccount,usrRank,usrExperience,usrExperienceMax);
 			}
 		//}
 	//}
@@ -2069,7 +2277,15 @@ function missionFail()
 }
 
 @RPC
-function FailSMrequest (sm:int) {}
+function FailSMrequest (sm:int)
+{
+	if (sm <= usrsmComplete)
+	{
+		//usrsmEngaged = 0;
+		usrsmCurrent = sm;
+		FailSMconfirm(sm);
+	}
+}
 
 @RPC
 function FailSMconfirm (sm:int)
@@ -2078,6 +2294,8 @@ function FailSMconfirm (sm:int)
 	{
 		usrsmEngaged = 0;
 		StoryQuests.resetTrigs();
+		
+		saveCompleted();
 		missionFail();
 		Camera.main.GetComponent(StoryQuests).sMessageDestroy();
 	}
@@ -2086,6 +2304,20 @@ function FailSMconfirm (sm:int)
 @RPC
 function CompleteSM(sm:int)
 {
+	if (sm == usrsmComplete)
+	{
+		//usrsmEngaged = 0;
+		usrsmComplete++;
+		//networkView.RPC("CompleteSMconfirm",info.sender);
+	}
+	
+	if (sm < usrsmComplete)
+	{
+		//usrsmEngaged = 0;
+		//networkView.RPC("CompleteSMconfirm",info.sender);
+	}
+	
+	CompleteSMconfirm();
 }
 
 @RPC
@@ -2098,13 +2330,24 @@ function CompleteSMconfirm()
 			
 		usrsmEngaged = 0;
 		StoryQuests.resetTrigs();
+		
+		saveCompleted();
 		missionComplete();
 	}
+}
+
+function saveCompleted ()
+{
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+				"&currentsm=" + usrsmCurrent + "&missionengaged=0&completedmissions=" + usrsmComplete);
 }
 
 @RPC
 function EngageSMrequest(sm:int)
 {
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+				"&currentsm=" + sm + "&missionengaged=" + 1);
+	EngageSMconfirm(sm);
 }
 
 @RPC
@@ -2144,9 +2387,20 @@ function InstallActivator()
 	installedactivator = true;
 }
 
+function reqBSAT()
+{
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + usrAccount + "&password=" + usrPassword + "&updateinfo");
+	yield uiData;
+}
+
 @RPC
 function PurchaseRequest (upgradeCode : String)
 {
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/shop.php?username=" + usrAccount + "&password=" + usrPassword + "&buy=" + upgradeCode);
+	yield reqData;
+	
+	requestStartData();
+	reqBSAT();
 }
 
 @RPC

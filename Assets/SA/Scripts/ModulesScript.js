@@ -50,7 +50,7 @@ function Update () {
 					playNotification = true;
 				}
 
-				Camera.main.networkView.RPC ("collectModule", RPCMode.Server);
+				Camera.main.GetComponent(HUD).collectModule();
 				Destroy(gameObject);
 				/*HUD.usrBloodstone = newAmount;
 				var bsNot = Instantiate(bsNotification, Vector3(0,0,0), Quaternion.identity);

@@ -18,13 +18,18 @@ var tempLocation : Vector3;
 var power : float = 0;
 var fromNPC : boolean = false;
 var lastSplash : String;
+var npcOwned : boolean;
+
+var pView : PhotonView;
 
 function Start ()
 {
-	if (Network.isClient)
+	pView = gameObject.GetComponent(PhotonView);
+	
+	if (1 == 1)
 		AudioSource.PlayClipAtPoint(rocketAudio, transform.position);
 
-	if (networkView.isMine && Network.isClient)
+	if (pView.isMine && 1 == 1)
 	{	
 		power = HUD.usrBlasterPower * 2;
 		
@@ -41,7 +46,7 @@ function Start ()
 		}
 	}
 	
-	else if (networkView.isMine && Network.isServer)
+	else if (pView.isMine && Network.isServer)
 	{
 		power = power * 2;
 		transform.LookAt(target.transform.position);
@@ -50,7 +55,7 @@ function Start ()
 
 function Update ()
 {
-	if (networkView.isMine)
+	if (pView.isMine)
 	{
 		if (target != null)
 		{
@@ -63,11 +68,11 @@ function Update ()
 		{
 			//if (Vector3.Distance(transform.position, tempLocation) < 0.5)
 				//GameObject.Destroy(GameObject.Find(gameObject.name));
-				Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);
-				Network.Destroy(networkView.viewID);
+				PhotonNetwork.RemoveRPCs(pView);
+				//PhotonNetwork.Destroy(gameObject);
 		}
 		
-		if (Vector3.Distance(transform.position, tempLocation) == 0)
+		/*if (Vector3.Distance(transform.position, tempLocation) == 0)
 		{
 			Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);
 			Network.Destroy(networkView.viewID);
@@ -75,10 +80,10 @@ function Update ()
 			GameObject.Destroy(GameObject.Find(gameObject.name));
 			var exp = Instantiate(explosion, transform.position, Quaternion.identity);
 			exp.tag = "rocket";
-		}
+		}*/
 	}
 	
-	if (networkView.isMine == false)
+	if (pView.isMine == false)
     {
         SyncedMovement();
     }
@@ -123,50 +128,66 @@ function SyncedMovement ()
 
 function OnTriggerEnter(obj:Collider)
 {
-	if (networkView.isMine)
+	if (pView.isMine)
 	{
-		if (obj.tag == "npc" || obj.tag == "op")
+		if (npcOwned == false)
 		{
-		    var objectsInRange : Collider[] = Physics.OverlapSphere(transform.position, 7.5);
-		    for (var col : Collider in objectsInRange)
-		    {
-		        var npc : npcColliderScript = col.GetComponent(npcColliderScript);
-		        if (col != null && col.name != lastSplash)
-		        {
-		        	lastSplash = col.name;
-		            // linear falloff of effect
-		            //var proximity : float = (location - enemy.transform.position).magnitude;
-		            //var effect : float = 1 - (proximity / radius);
-		 
-		            //enemy.ApplyDamage(damage * effect);
-		            if (col.tag == "npc" && Network.isClient)
-						npc.AddDamage(power);
-					
-					else if (col.tag == "op")
-					{
-						if (HUD.usrPvp == 1)
+			if (obj.tag == "npc" || obj.tag == "op")
+			{
+			    var objectsInRange : Collider[] = Physics.OverlapSphere(transform.position, 7.5);
+			    for (var col : Collider in objectsInRange)
+			    {
+			        var npc : npcColliderScript = col.GetComponent(npcColliderScript);
+			        if (col != null && col.name != lastSplash)
+			        {
+			        	lastSplash = col.name;
+			            // linear falloff of effect
+			            //var proximity : float = (location - enemy.transform.position).magnitude;
+			            //var effect : float = 1 - (proximity / radius);
+			 
+			            //enemy.ApplyDamage(damage * effect);
+			            if (col.tag == "npc" && 1 == 1)
+							npc.AddDamage(power);
+						
+						else if (col.tag == "op")
 						{
-							if (Network.isClient)
-								Camera.main.GetComponent(HUD).requestPvpDamage(target.name, power);
+							if (HUD.usrPvp == 1)
+							{
+								if (1 == 1)
+									Camera.main.GetComponent(HUD).requestPvpDamage(target.name, power);
+							}
+							else if (Network.isServer)
+							{
+								Camera.main.networkView.RPC ("returnRegularDamage", RPCMode.All, target.name, power);
+							}
 						}
-						else if (Network.isServer)
-						{
-							Camera.main.networkView.RPC ("returnRegularDamage", RPCMode.All, target.name, power);
-						}
-					}
-	            }
+		            }
+				}
+				
+		            
+		            
+		            
+				//Physics.OverlapSphere(transform.position, 150);
+				
+				//if (obj.name != target.name)
+				var exp = PhotonNetwork.Instantiate("explosion", transform.position, Quaternion.identity,0);
+				PhotonNetwork.Destroy(gameObject);
+				exp.tag = "rocket";
+				
 			}
-			
-	            
-	            
-	            
-			//Physics.OverlapSphere(transform.position, 150);
-			
-			//if (obj.name != target.name)
-			var exp = Network.Instantiate(explosion, transform.position, Quaternion.identity,0);
-			Network.Destroy(networkView.viewID);
-			exp.tag = "rocket";
-			
+		}
+		
+		else if (npcOwned == true)
+		{
+			if (obj.tag == "Player")
+			{
+				HUD.usrHealth = HUD.usrHealth - power;
+
+				var exp1 = PhotonNetwork.Instantiate("explosion", transform.position, Quaternion.identity,0);
+				PhotonNetwork.Destroy(gameObject);
+				exp1.tag = "rocket";
+				
+			}
 		}
 	}
 }

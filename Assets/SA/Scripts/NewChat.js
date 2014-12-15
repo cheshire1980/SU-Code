@@ -28,10 +28,10 @@ function sendChat ()
 	else if (sendText != "")
 	{
 		if (chatTab == "PUBLIC")
-			networkView.RPC("ChatRequest",RPCMode.Server,HUD.usrAccount,sendText);
+			Camera.main.GetComponent(PhotonView).RPC("IBChat",PhotonTargets.All,HUD.usrAccount,sendText);
 			
 		else if (chatTab == "GM")
-			networkView.RPC("obGMchat",RPCMode.Server,HUD.usrAccount,sendText);			
+			Camera.main.GetComponent(PhotonView).RPC("ibGMchat",PhotonTargets.All,HUD.usrAccount,sendText);			
 	}
 	
 	GameObject.Find("UI_ChatAnchor/UI_Chat/Input/Label").GetComponent(UILabel).text = "";

@@ -8,23 +8,53 @@ static var slifeCounter : float;
 var blaster : AudioClip;
 var sentryBlaster : boolean = false;
 
+var pView : PhotonView;
+var lifeTimer : float;
+var target : Transform;
+
+
 function Awake()
 {
 	//renderer.material.color = Color.cyan;
 	AudioSource.PlayClipAtPoint(blaster, transform.position);
 	
-	Destroy (gameObject, lifeTime);
+	
+	//PhotonNetwork.Destroy (gameObject, lifeTime);
 	//gameObject.
 	
 	//Debug.Log(Time.time);
 	//slifeCounter = Time.time;
 }
 
+function Update ()
+{
+	if (Time.fixedTime - lifeTimer >= lifeTime)
+	{
+		if (gameObject.GetComponent(PhotonView) != null)
+			PhotonNetwork.Destroy (gameObject);
+		else
+			GameObject.Destroy(gameObject);
+	}
+}
+
+function Start ()
+{
+	lifeTimer = Time.fixedTime;
+	pView = gameObject.GetComponent(PhotonView);
+
+	//if (pView.isMine)
+	//	transform.LookAt(target);
+	
+	//transform.Rotate(Vector3(0,90,0));
+	rigidbody.AddForce(transform.forward * 2000);
+	//Destroy(gameObject.GetComponent(PhotonView));
+}
+
 function OnTriggerEnter(obj:Collider)
 {
-	if (networkView != null)
+	if (pView != null)
 	{
-		if (networkView.isMine)
+		if (pView.isMine)
 		{
 			if (obj.tag == "op")
 			{
@@ -35,7 +65,7 @@ function OnTriggerEnter(obj:Collider)
 						if (sentryBlaster == true)
 						{
 							Camera.main.GetComponent(HUD).requestPvpDamage(obj.name, power);
-							GameObject.Destroy(gameObject);
+							PhotonNetwork.Destroy(gameObject);
 						}
 					}
 				}

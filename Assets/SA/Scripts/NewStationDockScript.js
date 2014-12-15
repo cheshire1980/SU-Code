@@ -4,7 +4,7 @@
 function Dock()
 {
 	Debug.Log("Sent listships");
-	Camera.main.networkView.RPC ("requestListShips", RPCMode.Server);
+	//Camera.main.networkView.RPC ("requestListShips", RPCMode.Server);
 	GameObject.Find("TriniStation").GetComponent(NewStationScript).Dock();
 }
 

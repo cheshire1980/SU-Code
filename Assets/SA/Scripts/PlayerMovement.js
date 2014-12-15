@@ -10,6 +10,8 @@ private var syncEndPosition : Vector3;
 private var syncStartRotation : Quaternion;
 private var syncEndRotation : Quaternion;
 
+var pos : Vector3;
+
  var playerName : String = "";
 
 var HUDName : GUISkin;
@@ -102,6 +104,7 @@ function Start ()
 	
 	if (pView.isMine)
 	{
+		//pView.owner.name = HUD.usrAccount;
 		health = HUD.usrHealth;
 		healthmax = HUD.usrHealthMax;
 		energy = HUD.usrEnergy;
@@ -145,7 +148,7 @@ function OnGUI ()
 		}
 	}
 	
-	if (Network.isClient)
+	if (1 == 1)
 	{
 		GUI.skin = HUDName;
 		var oldcolor = GUI.color;
@@ -319,8 +322,6 @@ function sendInfo (name : String, netID : int, rpvp : int, rrank : int, rhealth 
 {
 	pView = gameObject.GetComponent(PhotonView);
 	
-	Debug.Log(netID.ToString() + " " + pView.viewID.ToString());
-	
 	if (netID == pView.viewID)
 	{			
 		if (playerName == "");
@@ -344,7 +345,7 @@ function remoteExplosion(remoteName : String)
 	var temppos;
 	var temprot;
 
-	if (Network.isClient)
+	if (1 == 1)
 	{
 		if (remoteName == playerName)
 		{
@@ -355,7 +356,7 @@ function remoteExplosion(remoteName : String)
 					temprot = gameObject.transform.rotation;
 					temppos = gameObject.transform.position;
 					PhotonNetwork.RemoveRPCs(pView);
-					GameObject.Destroy(gameObject);
+					PhotonNetwork.Destroy(gameObject);
 					exp = Instantiate(explosion,temppos,temprot);
 				}
 			}
@@ -374,7 +375,7 @@ function remoteExplosion(remoteName : String)
 					temppos = gameObject.transform.position;
 					PhotonNetwork.RemoveRPCs(pView);
 					//PhotonNetwork.Destroy(gameObject);
-					GameObject.Destroy(gameObject);
+					PhotonNetwork.Destroy(gameObject);
 					exp = Instantiate(explosion,temppos,temprot);
 				}
 			}
@@ -385,14 +386,14 @@ function remoteExplosion(remoteName : String)
 @RPC
 function removePlayer(remoteName : String)
 {
-	if (Network.isClient)
+	if (1 == 1)
 	{
 		if (remoteName == playerName)
 		{
 			if (gameObject != null)
 			{
 				PhotonNetwork.RemoveRPCs(pView);
-				GameObject.Destroy(gameObject);
+				PhotonNetwork.Destroy(gameObject);
 			}
 		}
 	}
@@ -444,6 +445,8 @@ function Shoot(Name:String,Power:float,Pvp:int,Target:String)
 
 function Update ()
 {
+	pos = transform.position;
+	
 	var exp;
 	var temppos;
 	var temprot;
@@ -466,7 +469,7 @@ function Update ()
 				temprot = gameObject.transform.rotation;
 				temppos = gameObject.transform.position;
     			PhotonNetwork.RemoveRPCs(pView);
-    			GameObject.Destroy(gameObject);
+    			PhotonNetwork.Destroy(gameObject);
 				exp = Instantiate(explosion,temppos,temprot);
 				pView.RPC ("remoteExplosion",PhotonTargets.All, playerName);
 			}
@@ -518,5 +521,5 @@ function SyncedMovement ()
 
 function OnDisconnectedFromServer(info : NetworkDisconnection)
 {
-	GameObject.Destroy(gameObject);
+	PhotonNetwork.Destroy(gameObject);
 }

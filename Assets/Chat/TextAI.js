@@ -21,6 +21,6 @@ function copyText ()
 function OnGUI ()
 {
 	
-		UniPasteBoard.SetClipBoardString(gameObject.transform.GetComponent(UILabel).text);
+		//UniPasteBoard.SetClipBoardString(gameObject.transform.GetComponent(UILabel).text);
 
 }

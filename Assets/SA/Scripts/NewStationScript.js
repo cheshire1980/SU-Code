@@ -1,5 +1,5 @@
 ﻿#pragma strict
-
+	
 var stationDockWindow : GameObject;
 var stationHangar : GameObject;
 var stationWindow : GameObject;
@@ -46,6 +46,15 @@ private var Docked : boolean;
 
 var origPos : Vector3;
 
+var shipData : WWW;
+
+function requestShips()
+{
+	shipData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword);
+	yield shipData;
+}
+
+
 function Dock ()
 {
 	HUD.nowDocked = true;
@@ -59,15 +68,20 @@ function Dock ()
 	stationDockWindow.SetActive(false);
 	stationWindow.SetActive(true);
 	origPos = GameObject.Find(HUD.usrAccount).transform.position;
-	Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);
-	GameObject.Find(HUD.usrAccount).GetComponent(PlayerMovement).rPlayer(HUD.usrAccount);
-	//Network.Destroy(GameObject.Find(HUD.usrAccount).networkView.viewID);
+	//Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);
+	PhotonNetwork.RemoveRPCs(Camera.main.GetComponent(PhotonView));
+	//GameObject.Find(HUD.usrAccount).GetComponent(PlayerMovement).rPlayer(HUD.usrAccount);
+	PhotonNetwork.Destroy(GameObject.Find(HUD.usrAccount));
 	
 	// Code for TapForTap
 	TapForTap.SetYearOfBirth(1999);
 	TapForTap.CreateAdView(TapForTapVerticalAlignment.TOP, TapForTapHorizontalAlignment.CENTER);
 	//TapForTap.PrepareInterstitial();
 	//TapForTap.ShowInterstitial();
+	
+	// Code for request ships
+	requestShips();
+	//Debug.Log(shipData.text);
 }
 
 function resetVars ()
@@ -269,13 +283,24 @@ function purchaseShip ()
 		
 	if (HUD.usrBloodstone >= price)
 	{
-		Camera.main.networkView.RPC("PurchaseShip",RPCMode.Server,HUD.usrAccount,selectedShip);
-		HUD.usrActiveship = selectedShip;
-		
+		//Camera.main.networkView.RPC("PurchaseShip",RPCMode.Server,HUD.usrAccount,selectedShip);
+		//HUD.usrActiveship = selectedShip;
+		Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&purchaseship=" + selectedShip);
+		yield Camera.main.GetComponent(HUD).uiData;
 		resetShips();
 		resetTabs();
 		tabHangar = true;
+
+		shipBuyThread();		
 	}
+}
+
+function shipBuyThread()
+{
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&updateinfo");
+	yield Camera.main.GetComponent(HUD).uiData;
+	//yield WaitForSeconds(5);
+	requestShips();
 }
 
 function resetShips ()
@@ -364,17 +389,20 @@ function bUpgrades ()
 
 function addArmor ()
 {
-	Camera.main.networkView.RPC("AddSkill",RPCMode.Server,true,false,false);
+	//Camera.main.networkView.RPC("AddSkill",RPCMode.Server,true,false,false);
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillhealth");
 }
 
 function addPower ()
 {
-	Camera.main.networkView.RPC("AddSkill",RPCMode.Server,false,false,true);
+	//Camera.main.networkView.RPC("AddSkill",RPCMode.Server,false,false,true);
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillpower");
 }
 
 function addEnergy ()
 {
-	Camera.main.networkView.RPC("AddSkill",RPCMode.Server,false,true,false);
+	//Camera.main.networkView.RPC("AddSkill",RPCMode.Server,false,true,false);
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillenergy");
 }
 
 function displaySkills ()
@@ -538,7 +566,7 @@ function buyUpgrade ()
 		{
 			if (HUD.usrBloodstone >= upgradePrice)
 			{
-				Camera.main.networkView.RPC ("PurchaseRequest", RPCMode.Server, upgradeCode);
+				Camera.main.GetComponent(HUD).PurchaseRequest(upgradeCode);
 				resetShips();
 				resetTabs();
 				tabHangar = true;
@@ -549,14 +577,14 @@ function buyUpgrade ()
 		{
 			if (HUD.usrAmethyst >= upgradePrice)
 			{
-				Camera.main.networkView.RPC ("PurchaseRequest", RPCMode.Server, upgradeCode);
+				Camera.main.GetComponent(HUD).PurchaseRequest(upgradeCode);
 				resetShips();
 				resetTabs();
 				tabHangar = true;
 			}
 		}
 		
-		Camera.main.networkView.RPC ("requestMemberships", RPCMode.Server);
+		//Camera.main.networkView.RPC ("requestMemberships", RPCMode.Server);
 	}
 }
 
@@ -566,7 +594,7 @@ function Start ()
 }
 
 function Update ()
-{
+{	
 	if (Docked == false)
 	{
 		if (GameObject.Find(HUD.usrAccount) != null)
@@ -620,6 +648,31 @@ function Update ()
 		{
 			stationUpgrades.SetActive(true);
 			displayUpgrades();
+		}
+	}
+	
+	
+	if (shipData != null)
+	{
+		if (shipData.isDone)
+		{
+			var dataBuffer = shipData.text.Split("|"[0]);
+			var ids : String;
+			var ships : String;
+			var shipnames : String;
+			
+			for (var i = 0; i < dataBuffer.Length-1; i++)
+			{
+				var tmpstring = dataBuffer[i];
+				var iBuffer = tmpstring.Split(";"[0]);
+				
+				ids = ids + iBuffer[0] + ":";
+				ships = ships + iBuffer[1] + ":";
+				shipnames = shipnames + iBuffer[2] + ":";
+			}
+			
+			Camera.main.GetComponent(HUD).returnListShips(ids, ships, shipnames);
+			shipData = null;
 		}
 	}
 }

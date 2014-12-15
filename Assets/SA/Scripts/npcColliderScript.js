@@ -31,7 +31,7 @@ function OnTriggerEnter(blaster:Collider)
 		
 		yourDamage = yourDamage + bbScript.power;
 		//Debug.Log(yourDamage);
-		Camera.mainCamera.networkView.RPC("HitNPCRequest",RPCMode.Server,HUD.usrAccount,gameObject.name,HUD.usrBlasterPower);
+		Camera.main.GetComponent(PhotonView).RPC("HitNPCRequest",PhotonTargets.All,HUD.usrAccount,gameObject.name,HUD.usrBlasterPower);
 		Destroy(GameObject.Find(blaster.name));
 	}
 	
@@ -44,7 +44,7 @@ function OnTriggerEnter(blaster:Collider)
 		
 		AudioSource.PlayClipAtPoint(blasterhit, gameObject.transform.position);
 		Destroy(GameObject.Find(blaster.name));
-		//Camera.mainCamera.networkView.RPC("HitNPCRequest",RPCMode.Server,HUD.usrAccount,gameObject.name,HUD.usrBlasterPower);
+		//Camera.main.GetComponent(PhotonView).RPC("HitNPCRequest",PhotonTargets.All,HUD.usrAccount,gameObject.name,HUD.usrBlasterPower);
 	}
 	
 	if (blaster.tag == "rocket")
@@ -53,7 +53,7 @@ function OnTriggerEnter(blaster:Collider)
 		
 		yourDamage = yourDamage + rocketScript.power;
 		//Debug.Log(yourDamage);
-		Camera.mainCamera.networkView.RPC("HitNPCRequest",RPCMode.Server,HUD.usrAccount,gameObject.name,rocketScript.power);
+		Camera.main.GetComponent(PhotonView).RPC("HitNPCRequest",PhotonTargets.All,HUD.usrAccount,gameObject.name,rocketScript.power);
 		//Destroy(GameObject.Find(blaster.name));
 	}
 }
@@ -61,5 +61,5 @@ function OnTriggerEnter(blaster:Collider)
 function AddDamage (power : float)
 {
 	AudioSource.PlayClipAtPoint(blasterhit, gameObject.transform.position);
-	Camera.mainCamera.networkView.RPC("HitNPCRequest",RPCMode.Server,HUD.usrAccount,gameObject.name,power);
+	Camera.main.GetComponent(PhotonView).RPC("HitNPCRequest",PhotonTargets.All,HUD.usrAccount,gameObject.name,power);
 }

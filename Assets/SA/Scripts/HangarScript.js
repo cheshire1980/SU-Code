@@ -32,6 +32,8 @@ var selectedShip : String;
 var selectedShipname : String;
 var selectedPOS : int;
 
+var sData : WWW;
+var renameData : WWW;
 
 function parseShips () { ids = HUD.usrShipids.Split(":"[0]); ships = HUD.usrShips.Split(":"[0]); names = HUD.usrShipnames.Split(":"[0]); }
 
@@ -109,13 +111,20 @@ function selectShip (id : String)
 	}
 }
 
+function reqLoadShip(id : String)
+{
+	sData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&loadship=" + id);
+	yield sData;
+}
+
 function loadShip ()
 {
 	if (selectedID != "")
 	{
 		HUD.usrActiveship = selectedShip;
 		HUD.usrActiveshipname = selectedShipname;
-		Camera.main.networkView.RPC ("requestLoadShip", RPCMode.Server, int.Parse(selectedID));
+		//Camera.main.networkView.RPC ("requestLoadShip", RPCMode.Server, int.Parse(selectedID));
+		reqLoadShip(selectedID);
 	}
 }
 
@@ -124,11 +133,18 @@ function renameShip ()
 	doneButton.SetActive(true);
 }
 
+function renameSendData (info : String)
+{
+	info = info.Replace(" ","%20");
+	renameData = new WWW("http://www.spaceunfolding.com/remotedb/shop.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&buy=" + info);
+	yield renameData;
+}
+
 function renameComplete ()
 {
 	var name : String = GameObject.Find("UI Root/UI_StationPanel/HangarList/Name").GetComponent(UILabel).text;
 	
-	Camera.main.networkView.RPC ("requestRenameShip", RPCMode.Server, int.Parse(selectedID), name);
+	renameSendData("rship&rename=" + name);
 	
 	doneButton.SetActive(false);
 }
@@ -154,11 +170,51 @@ function Update ()
 	else if (selectedShip == "phaseSentinel") trueName = "Sentinel";
 	else if (selectedShip == "phaseCrawler") trueName = "Crawler";
 	
-	GameObject.Find("UI Root/UI_StationPanel/HangarList/Ship").GetComponent(UILabel).text = trueName;
+	GameObject.Find("UI Root/UI_StationPanel/HangarList/Ship").GetComponent(UILabel).text = trueName;	
+	
+	if (sData != null)
+	{
+		if (sData.isDone)
+		{
+			var iBuffer = sData.text.Split(";"[0]);		
+			var i0 : int = int.Parse(iBuffer[0]);
+			var i1 : int = int.Parse(iBuffer[1]);
+			var i2 : float = float.Parse(iBuffer[2]);
+			var i3 : float = float.Parse(iBuffer[3]);
+			var i4 : float = float.Parse(iBuffer[4]);
+			var i5 : float = float.Parse(iBuffer[5]);
+			var i6 : int = int.Parse(iBuffer[6]);
+			var i7 : int = int.Parse(iBuffer[7]);
+			var i8 : int = int.Parse(iBuffer[8]);
+			var i9 : int = int.Parse(iBuffer[9]);
+			var i10 : int = int.Parse(iBuffer[10]);
+			var i11 : float = float.Parse(iBuffer[11]);
+			var i12 : float = float.Parse(iBuffer[12]);
+			sData = null;
+			
+			Camera.main.GetComponent(HUD).UpdateInfo(i0,i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12);
+			Camera.main.GetComponent(HUD).requestStartData();
+		}
+	}
 	
 	if (doneButton.active == false)
 	{
-		selectedShipname = names[selectedPOS];
+		if (selectedPOS != null)
+			if (names[selectedPOS] != null)
+				selectedShipname = names[selectedPOS];
+			
 		GameObject.Find("UI Root/UI_StationPanel/HangarList/Name").GetComponent(UILabel).text = selectedShipname;
+	}
+	
+	if (renameData != null)
+	{
+		if (renameData.isDone)
+		{
+			names[selectedPOS] = renameData.text;
+			selectedShipname = renameData.text;
+			HUD.usrActiveshipname = renameData.text;
+			Camera.main.GetComponent(HUD).reqBSAT();
+			renameData = null;
+		}
 	}
 }

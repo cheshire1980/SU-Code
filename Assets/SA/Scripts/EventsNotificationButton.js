@@ -34,5 +34,5 @@ function missionsWindow ()
 
 function cancelMission ()
 {
-	Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+	Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 }

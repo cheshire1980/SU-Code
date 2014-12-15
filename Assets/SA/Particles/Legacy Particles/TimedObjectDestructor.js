@@ -8,8 +8,10 @@ function Awake ()
 
 function DestroyNow ()
 {
+	PhotonNetwork.RemoveRPCs(gameObject.GetComponent(PhotonView));
 	if (detachChildren) {
 		transform.DetachChildren ();
 	}
-	DestroyObject (gameObject);
+	//DestroyObject (gameObject);
+	PhotonNetwork.Destroy(gameObject);
 }

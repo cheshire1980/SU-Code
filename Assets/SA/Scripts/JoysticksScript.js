@@ -10,7 +10,7 @@ function Update () {
 
 function Awake ()
 {
-	if (Network.isClient)
+	if (1 == 1)
 		if (GameObject.Find("Dual Joysticks/LeftJoystick") != null)
 			gameObject.GetComponent(MoveAround).ljoy = GameObject.Find("Dual Joysticks/LeftJoystick").GetComponent(Joystick);
 	//gameObject.GetComponent(MoveAround).rjoy = GameObject.Find("Dual Joysticks/RightJoystick").GetComponent(Joystick);

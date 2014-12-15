@@ -611,7 +611,7 @@ function OnGUI()
 				if (GameObject.Find(HUD.usrAccount).GetComponent(MoveAround).forwardbackwardnew != 0)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,1);
+					
 					sm0trig1 = true;
 				}
 			}
@@ -626,7 +626,7 @@ function OnGUI()
 				if (GameObject.Find(HUD.usrAccount).GetComponent(MoveAround).forwardbackwardnew <= 1)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					sm0trig2 = true;
 				}
 			}
@@ -641,7 +641,7 @@ function OnGUI()
 				if (HUD.tBlasterTrigger)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,5);
+					
 					sm0trig5 = true;
 				}
 			}
@@ -654,7 +654,7 @@ function OnGUI()
 				//MoveAround.SelectedTarget = "drone";
 				//MoveAround.objSelected = true;
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,6);
+				
 				sm0trig6 = true;
 			}
 			
@@ -665,7 +665,7 @@ function OnGUI()
 				if (Vector3.Distance(GameObject.Find("drone").transform.position, GameObject.Find(HUD.usrAccount).transform.position) < 10)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,7);
+					
 					sm0trig7 = true;
 				}
 			}
@@ -682,14 +682,14 @@ function OnGUI()
 				if (HUD.QuestsMenu == true)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,8);
+					
 					sm0trig8 = true;
 				}
 			}
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 		}
@@ -703,7 +703,7 @@ function OnGUI()
 				if (HUD.afterburner == true)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,1);
+					
 					sm1trig1 = true;
 				}
 			}
@@ -715,7 +715,7 @@ function OnGUI()
 				if (HUD.usrEnergy <= 0)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					sm1trig2 = true;
 				}
 			}
@@ -727,7 +727,7 @@ function OnGUI()
 				if (HUD.usrEnergy >= HUD.usrEnergyMax)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,3);
+					
 					sm1trig3 = true;
 				}
 			}
@@ -737,7 +737,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(-139,0,-100), Quaternion.identity);
 				drone.name = "drone";
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,4);
+				
 				sm1trig4 = true;
 			}
 			
@@ -754,7 +754,7 @@ function OnGUI()
 					MoveAround.objSelected = false;
 					
 					Destroy(GameObject.Find("drone"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,5);
+					
 					sm1trig5 = true;
 				}
 			}
@@ -764,7 +764,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(-81,0,-58), Quaternion.identity);
 				drone.name = "drone";
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,6);
+				
 				sm1trig6 = true;
 			}
 			
@@ -779,7 +779,7 @@ function OnGUI()
 				{
 					sMessageDestroy();
 					Destroy(GameObject.Find("drone"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,7);
+					
 					sm1trig7 = true;
 				}
 			}
@@ -788,7 +788,7 @@ function OnGUI()
 			{
 				MoveAround.SelectedTarget = null;
 				MoveAround.objSelected = false;
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 
@@ -800,7 +800,7 @@ function OnGUI()
 			{
 				HUD.usrHealth = HUD.usrHealth / 2;
 				HUD.healthUpdate = true;
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,1);
+				
 				sm2trig1 = true;
 			}
 			
@@ -811,7 +811,7 @@ function OnGUI()
 				if (HUD.repair == true)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					sm2trig2 = true;
 				}
 			}
@@ -823,7 +823,7 @@ function OnGUI()
 				if (HUD.usrHealth >= HUD.usrHealthMax)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,3);
+					
 					sm2trig3 = true;
 				}
 			}
@@ -832,7 +832,7 @@ function OnGUI()
 			{
 				MoveAround.SelectedTarget = null;
 				MoveAround.objSelected = false;
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 			
@@ -847,7 +847,7 @@ function OnGUI()
 				bs.name = "Bloodstone";
 				var bbScript1 : BloodstoneScript = bs.GetComponent("BloodstoneScript");
 				bbScript1.amount = 0;
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,1);
+				
 				sm3trig1 = true;
 			}
 			
@@ -858,7 +858,7 @@ function OnGUI()
 				if (GameObject.Find("Bloodstone") == null)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					sm3trig2 = true;
 				}
 			}
@@ -867,7 +867,7 @@ function OnGUI()
 			{
 				MoveAround.SelectedTarget = null;
 				MoveAround.objSelected = false;
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 			
@@ -882,7 +882,7 @@ function OnGUI()
 				
 				//MoveAround.SelectedTarget = "drone";
 				//MoveAround.objSelected = true;
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,1);
+				
 				sm4trig1 = true;
 			}
 			
@@ -899,7 +899,7 @@ function OnGUI()
 					//MoveAround.objSelected = false;
 					
 					Destroy(GameObject.Find("drone"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					sm4trig2 = true;
 				}
 			}
@@ -910,7 +910,7 @@ function OnGUI()
 				killCount = HUD.killTotal;
 				HUD.killRank = 0;
 				HUD.killPlayer = null;
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,3);
+				
 				sm4trig3 = true;
 			}
 			
@@ -929,7 +929,7 @@ function OnGUI()
 				if ((HUD.killTotal - killCount) == 10)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,4);
+					
 					sm4trig4 = true;
 				}
 			}
@@ -939,7 +939,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(-81,0,-58), Quaternion.identity);
 				drone.name = "drone";
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,5);
+				
 				sm4trig5 = true;
 			}
 			
@@ -956,7 +956,7 @@ function OnGUI()
 					//MoveAround.SelectedTarget = null;
 					//MoveAround.objSelected = false;
 					Destroy(GameObject.Find("drone"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,6);
+					
 					sm4trig6 = true;
 				}
 			}
@@ -965,7 +965,7 @@ function OnGUI()
 			{
 				//MoveAround.SelectedTarget = null;
 				//MoveAround.objSelected = false;
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 			
@@ -978,7 +978,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(4,0,-32), Quaternion.identity);
 				drone.name = "drone";
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,1);
+				
 				sm5trig1 = true;
 			}
 			
@@ -995,7 +995,7 @@ function OnGUI()
 					//MoveAround.objSelected = false;
 					Destroy(GameObject.Find("drone"));
 
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					sm5trig2 = true;
 				}
 			}
@@ -1005,7 +1005,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(-139,0,-100), Quaternion.identity);
 				drone.name = "drone";
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,3);
+				
 				sm5trig3 = true;
 			}
 			
@@ -1021,7 +1021,7 @@ function OnGUI()
 					//MoveAround.SelectedTarget = null;
 					//MoveAround.objSelected = false;
 					Destroy(GameObject.Find("drone"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,4);
+					
 					sm5trig4 = true;
 				}
 			}
@@ -1034,7 +1034,7 @@ function OnGUI()
 				killCount = HUD.killTotal;
 				HUD.killRank = 0;
 				HUD.killPlayer = null;
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,5);
+				
 				sm5trig5 = true;
 			}
 			
@@ -1045,7 +1045,7 @@ function OnGUI()
 				if ((HUD.killTotal - killCount) == 10)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,6);
+					
 					sm5trig6 = true;
 				}
 			}
@@ -1058,7 +1058,7 @@ function OnGUI()
 				{
 					sMessageDestroy();
 					Destroy(GameObject.Find("powercore"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,7);
+					
 					sm5trig7 = true;
 				}
 			}
@@ -1068,7 +1068,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(-81,0,-58), Quaternion.identity);
 				drone.name = "drone";
 				
-				Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,8);
+				
 				sm5trig8 = true;
 			}
 			
@@ -1082,10 +1082,10 @@ function OnGUI()
 					//MoveAround.SelectedTarget = null;
 					//MoveAround.objSelected = false;
 					Destroy(GameObject.Find("drone"));
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,9);
+					
 					sm5trig9 = true;
 					
-					//Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+					//Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				}
 			}
 			
@@ -1093,7 +1093,7 @@ function OnGUI()
 			{
 				//MoveAround.SelectedTarget = null;
 				//MoveAround.objSelected = false;
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 			
@@ -1117,7 +1117,7 @@ function OnGUI()
 				if (Vector3.Distance(GameObject.Find("drone").transform.position, GameObject.Find(HUD.usrAccount).transform.position) < 10)
 				{
 					sMessageDestroy();
-					Camera.main.networkView.RPC("SquadMissionUpdateRequest",RPCMode.Server,2);
+					
 					Destroy(GameObject.Find("drone"));
 					sm5trig2 = true;
 				}
@@ -1136,7 +1136,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 				
 			}
 			
@@ -1168,7 +1168,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1197,7 +1197,7 @@ function OnGUI()
 			{
 				montarShip = Instantiate(Montar, Vector3(-81,0,-58), Quaternion.identity);
 				montarShip.name = "Montar";
-				GameObject.Find("Montar").GetComponent(missionMontarBrain).target = GameObject.Find(HUD.usrAccount).transform;
+				montarShip.GetComponent(missionMontarBrain).target = GameObject.Find(HUD.usrAccount).transform;
 				sm0trig3 = true;
 			}
 			
@@ -1211,7 +1211,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1228,7 +1228,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1249,7 +1249,7 @@ function OnGUI()
 			{
 				montarShip = Instantiate(Montar, GameObject.Find("trinispace").transform.position,Quaternion.identity);
 				montarShip.name = "Montar";
-				GameObject.Find("Montar").GetComponent(missionMontarBrain).target = GameObject.Find(HUD.usrAccount).transform;
+				montarShip.GetComponent(missionMontarBrain).target = GameObject.Find(HUD.usrAccount).transform;
 				sm0trig2 = true;
 			}
 			
@@ -1279,7 +1279,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1293,7 +1293,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1313,7 +1313,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1330,7 +1330,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1380,7 +1380,7 @@ function OnGUI()
 				
 				if (HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (npc1 != null)
@@ -1416,7 +1416,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1477,7 +1477,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1548,7 +1548,7 @@ function OnGUI()
 				
 				if (HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (npc1 != null)
@@ -1590,7 +1590,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1651,7 +1651,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1676,7 +1676,7 @@ function OnGUI()
 					
 					montarShip = Instantiate(Montar, GameObject.Find("KrulStation").transform.position,Quaternion.identity);
 					montarShip.name = "Montar";
-					GameObject.Find("Montar").GetComponent(missionMontarBrain).target = GameObject.Find(HUD.usrAccount).transform;
+					montarShip.GetComponent(missionMontarBrain).target = GameObject.Find(HUD.usrAccount).transform;
 					
 					drone = Instantiate(droneInterceptorTemplate, Vector3(-1911,0,-172), Quaternion.identity);
 					drone.name = "drone";
@@ -1693,7 +1693,7 @@ function OnGUI()
 					sMessageDestroy();
 					sm0trig3 = true;
 					
-					GameObject.Find("Montar").GetComponent(missionMontarBrain).target = GameObject.Find("drone").transform;
+					montarShip.GetComponent(missionMontarBrain).target = GameObject.Find("drone").transform;
 					
 					npc1 = Instantiate(missionNpc, GameObject.Find("KrulStation").transform.position, Quaternion.identity);
 					npc1.GetComponent(missionNpcBrain).target = GameObject.Find("Montar").transform;
@@ -1707,7 +1707,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1743,7 +1743,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1792,7 +1792,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1852,7 +1852,7 @@ function OnGUI()
 				
 				if (GameObject.Find("Montar") == null || GameObject.Find("drone") == null || HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					
 					if (GameObject.Find("Montar") != null)
@@ -1887,7 +1887,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 		
@@ -1929,7 +1929,7 @@ function OnGUI()
 			
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}
 		}
 
@@ -1991,7 +1991,7 @@ function OnGUI()
 					GameObject.Destroy(npcSentry4.gameObject);
 					missionFailed = true;
 					
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 				}
 						
 				if (Vector3.Distance(GameObject.Find(HUD.usrAccount).transform.position, drone.position) < 150)
@@ -2016,7 +2016,7 @@ function OnGUI()
 					GameObject.Destroy(npcSentry4.gameObject);
 					missionFailed = true;
 					
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 				}
 
 				if (Vector3.Distance(GameObject.Find(HUD.usrAccount).transform.position, drone.position) < 20)
@@ -2047,7 +2047,7 @@ function OnGUI()
 					GameObject.Destroy(cynicalShip.gameObject);
 					missionFailed = true;
 					
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 				}
 
 				var tmptargetcynpos : Vector3;
@@ -2133,7 +2133,7 @@ function OnGUI()
 
 				if (HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					GameObject.Destroy(GameObject.Find("drone"));
 					GameObject.Destroy(GameObject.Find("shivanstation"));
@@ -2158,7 +2158,7 @@ function OnGUI()
 				
 				if (HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					GameObject.Destroy(GameObject.Find("drone"));
 					GameObject.Destroy(GameObject.Find("shivanstation"));
@@ -2183,7 +2183,7 @@ function OnGUI()
 				
 				if (HUD.usrHealth <= 0)
 				{
-					Camera.main.networkView.RPC("FailSMrequest",RPCMode.Server,HUD.usrsmCurrent);
+					Camera.main.GetComponent(HUD).FailSMrequest(HUD.usrsmCurrent);
 					sMessageDestroy();
 					GameObject.Destroy(GameObject.Find("drone"));
 					GameObject.Destroy(GameObject.Find("shivanstation"));
@@ -2213,7 +2213,7 @@ function OnGUI()
 
 			else
 			{
-				Camera.main.networkView.RPC("CompleteSM",RPCMode.Server,HUD.usrsmCurrent);
+				Camera.main.GetComponent(HUD).CompleteSM(HUD.usrsmCurrent);
 			}			
 		}
 	}

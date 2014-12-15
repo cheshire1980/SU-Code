@@ -158,23 +158,33 @@ public class Billing : MonoBehaviour {
 		//Debug.Log ("Cousume Responce: " + result.response.ToString() + " " + result.message);
 	}
 
+	//IEnumerator PR (string pack)
+	//{
+	//	WWW www = new WWW("http://www.spaceunfolding.com/remotedb/shop.php?username=" + PlayerPrefs.GetString ("PlayerName") + "&password=" + PlayerPrefs.GetString ("PlayerPassword") + "&buy=" + pack);
+	//	yield return www;
+	//}
+
 	public static void checkUpdate (string farts)
 	{
 		if (farts  == "50_pack") {
 			AndroidInAppPurchaseManager.instance.consume ("50_pack");
-			Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "50_pack");
+			PlayerPrefs.SetString ("purchasePacks","50_pack");
+			//Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "50_pack");
 		}
 		if (farts == "100_pack") {
 			AndroidInAppPurchaseManager.instance.consume ("100_pack");
-			Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "100_pack");
+			PlayerPrefs.SetString ("purchasePacks","100_pack");
+			//Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "100_pack");
 		}
 		if (farts == "200_pack") {
 			AndroidInAppPurchaseManager.instance.consume ("200_pack");
-			Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "200_pack");
+			PlayerPrefs.SetString ("purchasePacks","200_pack");
+			//Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "200_pack");
 		}
 		if (farts == "500_pack") {
 			AndroidInAppPurchaseManager.instance.consume ("500_pack");
-			Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "500_pack");
+			PlayerPrefs.SetString ("purchasePacks","500_pack");
+			//Camera.main.networkView.RPC ("PurchaseRequest",RPCMode.Server, "500_pack");
 		}
 	}
 }

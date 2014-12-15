@@ -20,9 +20,11 @@ static var remotePower : float = 0;
 static var remotePvp = 0;
 static var remoteTarget = "";
 
+var pView : PhotonView;
 
 function Start()
 {
+	pView = Camera.main.GetComponent(PhotonView);
 	usrAccount = PlayerPrefs.GetString("PlayerName");
 }
 
@@ -30,7 +32,7 @@ function OnGUI()
 {
 	var Name = Camera.main.GetComponent(HUD).triggerName;
 
-	if (networkView.isMine == false)
+	if (pView.isMine == false)
 	{
 		if (Name == gameObject.GetComponent(PlayerMovement).playerName)
 		{

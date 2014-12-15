@@ -26,7 +26,7 @@ function sendCMD ()
 
 function Update ()
 {
-	if (gameObject == "GMCBUTTON")
+	if (gameObject.name == "GMCBUTTON")
 	{
 		if (HUD.usrGM > 0)
 			gmcButton.SetActive(true);

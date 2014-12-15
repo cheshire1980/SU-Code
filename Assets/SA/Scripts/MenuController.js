@@ -1,6 +1,17 @@
 #pragma strict
 
+import System;
+//import System.Data;
 import System.IO;
+
+//import MySql.Data;
+//import MySql.Data.MySqlClient;
+//import System.Collections;
+//import System.Collections.Generic;
+//import System.Data.SqlClient;
+
+
+
 static var filePath = "sudata.dat";
 
 var header : Texture;
@@ -67,7 +78,11 @@ static var phase4 = false;
 
 private var windowRect = Rect (Screen.width/2-350/2, Screen.height/2-480/2, 350, 480);
 
-
+var dbconn : WWW;
+var dbnew : WWW;
+	
+	
+// End of variables + Start of code
 function OnConnectedToServer()
 {
 	if (Network.peerType == NetworkPeerType.Client)
@@ -184,6 +199,7 @@ function mainWindow(windowID : int)
 
 function Start()
 {
+	Debug.Log(Application.persistentDataPath);
 	var resolutions : Resolution[] = Screen.resolutions;
 
 	if (Application.platform == RuntimePlatform.Android)
@@ -193,6 +209,7 @@ function Start()
 		Screen.SetResolution (1280, 720, true);
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 	}
+	
 }
 
 function OnGUI()
@@ -357,10 +374,10 @@ function backClicked()
 function enableGuest()
 {
 
-	Network.Disconnect();
+	//Network.Disconnect();
 	NewButtonVisible = false;
 	CreateButtonVisible = true;
-	Network.Connect(svrAddr,svrPort);
+	//Network.Connect(svrAddr,svrPort);
 
 	var tempAccount = "";
 	var tempPassword = "";
@@ -409,10 +426,10 @@ function enableGuest()
 function enableNew()
 {
 
-	Network.Disconnect();
+	//Network.Disconnect();
 	NewButtonVisible = false;
 	CreateButtonVisible = true;
-	Network.Connect(svrAddr,svrPort);
+	//Network.Connect(svrAddr,svrPort);
 
 	var temp : GameObject;
 	
@@ -432,6 +449,12 @@ function enableNew()
 	
 }
 
+function dbNewCreate (uname : String, upass : String, uemail : String)
+{
+	dbnew = new WWW("http://www.spaceunfolding.com/remotedb/newacct.php?username=" + uname + "&password=" + upass + "&email=" + uemail);
+	yield dbnew;
+}
+
 function enableCreate()
 {
 
@@ -440,8 +463,8 @@ function enableCreate()
 	NewButtonVisible = true;
 	CreateButtonVisible = false;
 	GameObject.Find("Info").GetComponent(UILabel).text = "Checking player name availability, please wait ...";
-	networkView.RPC("New",RPCMode.Server,usrAccount,usrPassword,usrEmail);
-
+	//networkView.RPC("New",RPCMode.Server,usrAccount,usrPassword,usrEmail);
+	dbNewCreate(usrAccount, usrPassword, usrEmail);
 }
 
 function enableNewCreate()
@@ -453,8 +476,8 @@ function enableNewCreate()
 	NewButtonVisible = true;
 	CreateButtonVisible = false;
 	GameObject.Find("Info").GetComponent(UILabel).text = "Checking player name availability, please wait ...";
-	networkView.RPC("New",RPCMode.Server,usrAccount,usrPassword,usrEmail);
-
+	//networkView.RPC("New",RPCMode.Server,usrAccount,usrPassword,usrEmail);
+	dbNewCreate(usrAccount, usrPassword, usrEmail);
 }
 
 function enableExisting()
@@ -503,10 +526,107 @@ function enableLogin()
 	
 	connFlag = true;
 	phase1 = true;
-	Network.Connect(svrAddr,svrPort);
+	
+	dbLogin(usrAccount, usrPassword);
+		
+	//Network.Connect(svrAddr,svrPort);
 	//PhotonNetwork.ConnectUsingSettings("v1.0");
 	//PhotonNetwork.JoinRoom("main");
 
+}
+
+function dbLogin (uname : String, upass : String)
+{
+	dbconn = new WWW("http://www.spaceunfolding.com/remotedb/login.php?username=" + usrAccount + "&password=" + usrPassword);
+	yield dbconn;
+}
+
+function dbLogin2 ()
+{
+	if (dbconn != null)
+	{
+		if (dbconn.text == "BAD")
+		{
+			phase1 = false;
+			phase2 = false;
+			phase3 = false;
+			ErrorTriggerNotLoggedIn = true;
+			ErrorTriggerAccountCreated = false;
+			ErrorTriggerAccountExists = false;
+			ErrorTriggerIncorrectVersion = false;
+			dbconn = null;
+		}
+
+		else
+		{
+			//phase1 = false;
+			//phase2 = false;
+			//phase3 = true;
+			
+			//PhotonNetwork.ConnectUsingSettings("v1.0");
+			if (dbconn.text.Substring(0,4) == "GOOD")
+			{
+				var iBuffer = dbconn.text.Split(";"[0]);
+				dbconn = null;
+				
+				Debug.Log(iBuffer[0]);
+
+				var data1 : String = iBuffer[1];
+				var data2 : float = float.Parse(iBuffer[2]);
+				var data3 : float = float.Parse(iBuffer[3]);
+				var data4 : float = float.Parse(iBuffer[4]);
+				var datavect : Vector3 = Vector3(data2,data3,data4);
+				var data5 : int = int.Parse(iBuffer[5]);
+				var data6 : int = int.Parse(iBuffer[6]);
+				var data7 : float = float.Parse(iBuffer[7]);
+				var data8 : float = float.Parse(iBuffer[8]);
+				var data9 : int = int.Parse(iBuffer[9]);
+				var data10 : int = int.Parse(iBuffer[10]);
+				var data11 : String = iBuffer[11];
+				var data12 : float = float.Parse(iBuffer[12]);
+				var data13 : float = float.Parse(iBuffer[13]);
+				var data14 : float = float.Parse(iBuffer[14]);
+				var data15 : float = float.Parse(iBuffer[15]);
+				var data16 : int = int.Parse(iBuffer[16]);
+				var data17 : int = int.Parse(iBuffer[17]);
+				var data18 : int = int.Parse(iBuffer[18]);
+				var data19 : int = int.Parse(iBuffer[19]);
+				var data20 : int = int.Parse(iBuffer[20]);
+				var data21 : int = int.Parse(iBuffer[21]);
+				var data22 : int = int.Parse(iBuffer[22]);
+				var data23 : String = iBuffer[23];
+				var data24 : int = int.Parse(iBuffer[24]);
+
+				LoggedIn(data1,datavect,data5,data6,data7,data8,data9,data10,data11,
+									data12,data13,data14,data15,data16,
+									data17,data18,data19,data20,data21,data22,data23,data24);
+			}
+		}
+	}	
+}
+
+function dbNewCreate2 ()
+{
+	if (dbnew != null)
+	{
+		if (dbnew.text == "GOOD")
+		{
+			AccountCreated();
+			dbnew = null;
+		}
+		
+		else if (dbnew.text == "BAD")
+		{
+			AccountExists();
+			dbnew = null;
+		}
+	}
+}
+
+function Update ()
+{
+	dbLogin2();
+	dbNewCreate2();
 }
 
 function OnJoinedLobby ()
@@ -532,7 +652,8 @@ function enableGuestLogin()
 		
 	connFlag = true;
 	phase1 = true;
-	Network.Connect(svrAddr,svrPort);
+	//Network.Connect(svrAddr,svrPort);
+	dbLogin(usrAccount, usrPassword);
 
 }
 
@@ -570,6 +691,7 @@ function LoggedIn(Name:String,location:Vector3,gm:int,rank:int,experience:float,
 	
 	usrAccount = Name;
 	PlayerPrefs.SetString("PlayerName",usrAccount);
+	PlayerPrefs.SetString("PlayerPassword",usrPassword);
 	PlayerPrefs.SetInt("PlayerGM",gm);
 	//PlayerPrefs.SetInt("PlayerHealth",10);
 	//PlayerPrefs.SetInt("PlayerHealthMax",10);
