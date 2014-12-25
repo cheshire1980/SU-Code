@@ -418,6 +418,7 @@ function enableGuest()
 	{
 		usrAccount = tempAccount;
 		usrPassword = tempPassword;
+		dbNewCreate(usrAccount, usrPassword, "");
 		enableGuestLogin();
 	}
 	
@@ -625,6 +626,23 @@ function dbNewCreate2 ()
 
 function Update ()
 {
+	if (PlayerPrefs.GetInt("AutoCreateName") == 1)
+	{
+		PlayerPrefs.SetInt("AutoCreateName",0);
+		//enableGuest();
+		//dbNewCreate(PlayerPrefs.GetString("AutoCreateName"), SystemInfo.deviceUniqueIdentifier, "");
+		
+	    #if !UNITY_WEBPLAYER
+		var sw = File.CreateText(Application.persistentDataPath + "/" + filePath);
+		sw.WriteLine(PlayerPrefs.GetString("AutoCreatePlayername"));
+		sw.WriteLine(PlayerPrefs.GetString("AutoCreatePassword"));
+		sw.Flush();
+		sw.Close();
+		#endif
+
+		enableGuest();
+	}
+	
 	dbLogin2();
 	dbNewCreate2();
 }

@@ -1,8 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using Facebook.MiniJSON;
 
 public class FBook : MonoBehaviour {
+
+	private static Dictionary<string, string>   profile         = null;
 
 	// Use this for initialization
 	void Start () {
@@ -78,7 +81,7 @@ public class FBook : MonoBehaviour {
 		Debug.Log("Logged in. ID: " + FB.UserId);
 		
 		// Reqest player info and profile picture                                                                           
-		FB.API ("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
+		FB.API ("/me?fields=id,first_name,last_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);
 	}
 
 	void APICallback(FBResult result)                                                                                              
@@ -88,12 +91,19 @@ public class FBook : MonoBehaviour {
 		{                                                                                                                          
 			Debug.LogError(result.Error);                                                                                           
 			// Let's just try again                                                                                                
-			FB.API("/me?fields=id,first_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);     
+			FB.API("/me?fields=id,first_name,last_name,friends.limit(100).fields(first_name,id)", Facebook.HttpMethod.GET, APICallback);     
 			return;                                                                                                                
 		}                                                                                                                          
-		
-		profile = Util.DeserializeJSONProfile(result.Text);                                                                        
-		GameStateManager.Username = profile["first_name"];                                                                         
-		friends = Util.DeserializeJSONFriends(result.Text);                                                                        
+
+		profile = Util.DeserializeJSONProfile(result.Text);
+		//Debug.Log (result.Text);
+		PlayerPrefs.SetString ("AutoCreatePlayername", profile["first_name"] + profile["last_name"]);
+		PlayerPrefs.SetString ("AutoCreatePassword", profile ["id"]);
+		Debug.Log (profile["id"]);
+		PlayerPrefs.SetInt ("AutoCreateName", 1);
+
+		//Debug.Log (profile["first_name"] + " " + profile["last_name"]);
+		//GameStateManager.Username = profile["first_name"];                                                                         
+		//friends = Util.DeserializeJSONFriends(result.Text);                                                                        
 	}
 }
