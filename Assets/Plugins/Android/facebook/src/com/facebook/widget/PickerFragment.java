@@ -623,8 +623,7 @@ public abstract class PickerFragment<T extends GraphObject> extends Fragment {
         }
     }
 
-    @SuppressWarnings("deprecation")
-	private void inflateTitleBar(ViewGroup view) {
+    private void inflateTitleBar(ViewGroup view) {
         ViewStub stub = (ViewStub) view.findViewById(R.id.com_facebook_picker_title_bar_stub);
         if (stub != null) {
             View titleBar = stub.inflate();

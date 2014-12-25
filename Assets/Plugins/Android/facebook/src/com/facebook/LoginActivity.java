@@ -56,21 +56,13 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_facebook_login_activity_layout);
 
-    	Log.d("AndroidNative", "LoginActivity create");
         if (savedInstanceState != null) {
-        	
-            
             callingPackage = savedInstanceState.getString(SAVED_CALLING_PKG_KEY);
             authorizationClient = (AuthorizationClient) savedInstanceState.getSerializable(SAVED_AUTH_CLIENT);
-            
-            Log.d("AndroidNative", "1. " + callingPackage);
         } else {
-        	
             callingPackage = getCallingPackage();
             authorizationClient = new AuthorizationClient();
             request = (AuthorizationClient.AuthorizationRequest) getIntent().getSerializableExtra(EXTRA_REQUEST);
-            
-            Log.d("AndroidNative", "2. " + callingPackage);
         }
 
         authorizationClient.setContext(this);

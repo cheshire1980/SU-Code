@@ -229,7 +229,7 @@ function OnGUI()
 	//GUI.skin = mySkin2;
 	
 	//GUI.DrawTexture(Rect(Screen.width/2-(965/2), 0, 965, 298),header);
-	GUI.DrawTexture(Rect(Screen.width/2-(600/2), 10, 600, 56),headerlogo);
+	//GUI.DrawTexture(Rect(Screen.width/2-(808/4), -20, (808/2), (246/2)),headerlogo);
 
 	if (ErrorTriggerNotLoggedIn)
 		GameObject.Find("Info").GetComponent(UILabel).text = "The Acct/Pass is incorrect!!";
