@@ -98,6 +98,11 @@ function setRepairBooster3 ()
 	GameObject.Find("TriniStation").GetComponent(NewStationScript).setRepairBooster3();	
 }
 
+function setNameChange ()
+{
+	GameObject.Find("TriniStation").GetComponent(NewStationScript).setNameChange();	
+}
+
 function buyUpgrade ()
 {
 	GameObject.Find("TriniStation").GetComponent(NewStationScript).buyUpgrade();	
@@ -111,6 +116,11 @@ function setResetSkills ()
 function setPurchaseShivanInterceptor ()
 {
 	GameObject.Find("TriniStation").GetComponent(NewStationScript).setPurchaseShivanInterceptor();
+}
+
+function doRename ()
+{
+	Camera.main.GetComponent(HUD).doRename();
 }
 
 function closeNewsWindow ()

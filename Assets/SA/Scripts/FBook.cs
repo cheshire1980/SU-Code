@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Facebook.MiniJSON;
+using System;
+using System.Text.RegularExpressions;
 
 public class FBook : MonoBehaviour {
 
@@ -17,17 +19,20 @@ public class FBook : MonoBehaviour {
 	
 	}
 
-
-	void OnGUI () {
+	public void FBookButton ()
+	{
+		FB.Login("email,publish_actions", LoginCallback);                                                        
+	}
+	
+	/*void OnGUI () {
 		if (!FB.IsLoggedIn)                                                                                              
 		{                                                                                                                
-			GUI.Label((new Rect(179 , 11, 287, 160)), "Login to Facebook");             
-			if (GUI.Button(new Rect(10, 10, 200, 200), "Test"))                                      
+			if (GUI.Button(new Rect(10, 10, 200, 50), "Login to Facebook"))                                      
 			{                                                                                                            
 				FB.Login("email,publish_actions", LoginCallback);                                                        
 			}                                                                                                            
 		}  
-	}
+	}*/
 
 	void Awake () {
 
@@ -43,7 +48,7 @@ public class FBook : MonoBehaviour {
 		if (FB.IsLoggedIn)                                                                       
 		{                                                                                        
 			Debug.Log("Already logged in");                                                    
-			OnLoggedIn();                                                                        
+			//OnLoggedIn();                                                                        
 		}
 		else
 		{
@@ -97,6 +102,10 @@ public class FBook : MonoBehaviour {
 
 		profile = Util.DeserializeJSONProfile(result.Text);
 		//Debug.Log (result.Text);
+
+		string strippedName = profile ["first_name"] + profile ["last_name"];
+		strippedName = Regex.Replace(strippedName, "( )+", "");
+
 		PlayerPrefs.SetString ("AutoCreatePlayername", profile["first_name"] + profile["last_name"]);
 		PlayerPrefs.SetString ("AutoCreatePassword", profile ["id"]);
 		Debug.Log (profile["id"]);

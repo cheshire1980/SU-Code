@@ -50,7 +50,7 @@ var shipData : WWW;
 
 function requestShips()
 {
-	shipData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword);
+	shipData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword);
 	yield shipData;
 }
 
@@ -285,7 +285,7 @@ function purchaseShip ()
 	{
 		//Camera.main.networkView.RPC("PurchaseShip",RPCMode.Server,HUD.usrAccount,selectedShip);
 		//HUD.usrActiveship = selectedShip;
-		Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&purchaseship=" + selectedShip);
+		Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&purchaseship=" + selectedShip);
 		yield Camera.main.GetComponent(HUD).uiData;
 		resetShips();
 		resetTabs();
@@ -297,7 +297,7 @@ function purchaseShip ()
 
 function shipBuyThread()
 {
-	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&updateinfo");
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&updateinfo");
 	yield Camera.main.GetComponent(HUD).uiData;
 	//yield WaitForSeconds(5);
 	requestShips();
@@ -390,19 +390,19 @@ function bUpgrades ()
 function addArmor ()
 {
 	//Camera.main.networkView.RPC("AddSkill",RPCMode.Server,true,false,false);
-	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillhealth");
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillhealth");
 }
 
 function addPower ()
 {
 	//Camera.main.networkView.RPC("AddSkill",RPCMode.Server,false,false,true);
-	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillpower");
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillpower");
 }
 
 function addEnergy ()
 {
 	//Camera.main.networkView.RPC("AddSkill",RPCMode.Server,false,true,false);
-	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillenergy");
+	Camera.main.GetComponent(HUD).uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&addskill=skillenergy");
 }
 
 function displaySkills ()
@@ -460,6 +460,11 @@ function setResetSkills ()
 {
 	setUpgrade("rskills");
 	buyUpgrade();
+}
+
+function setNameChange ()
+{
+	setUpgrade("nc");
 }
 
 function setPurchaseShivanInterceptor ()
@@ -547,12 +552,24 @@ function setUpgrade (theUpgrade : String)
 		upgradePriceReq = 2;
 		upgradeCode = "psi";
 	}
+	
+	else if (theUpgrade == "nc")
+	{
+		upgradeTitle = "Name Change";
+		upgradeDesc = "Changes your in game name!";
+		upgradePrice = 5;
+		upgradePriceReq = 2;
+		upgradeCode = "nc";
+	}
 }
 
 function displayUpgrades ()
 {
-	GameObject.Find("UI Root/UI_StationPanel/Upgrades/Title").GetComponent(UILabel).text = upgradeTitle;
-	GameObject.Find("UI Root/UI_StationPanel/Upgrades/Title/Description").GetComponent(UILabel).text = upgradeDesc;
+	GameObject.Find("UI Root/UI_ShopPanel/Sprite/Title").GetComponent(UILabel).text = upgradeTitle;
+	GameObject.Find("UI Root/UI_ShopPanel/Sprite/Title/Description").GetComponent(UILabel).text = upgradeDesc;
+	
+	//GameObject.Find("UI Root/UI_StationPanel/Upgrades/Title").GetComponent(UILabel).text = upgradeTitle;
+	//GameObject.Find("UI Root/UI_StationPanel/Upgrades/Title/Description").GetComponent(UILabel).text = upgradeDesc;
 }
 
 function buyUpgrade ()
@@ -644,9 +661,9 @@ function Update ()
 			displaySkills();
 		}
 		
-		else if (tabUpgrades == true)
+		if (Camera.main.GetComponent(HUD).ShopWindow.active == true)
 		{
-			stationUpgrades.SetActive(true);
+			//stationUpgrades.SetActive(true);
 			displayUpgrades();
 		}
 	}

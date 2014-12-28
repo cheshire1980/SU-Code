@@ -66,6 +66,7 @@ static var sHealth : float;
 static var sHealthMax : float;
 static var sHealthPercent : float;
 
+static var usrID = "";
 static var usrAccount = "";
 static var usrPassword = "";
 static var usrGM : int;
@@ -199,6 +200,8 @@ var mm : GameObject;
 
 static var ProfileWindow : boolean;
 static var BuddyWindow : boolean;
+var ShopWindow : GameObject;
+var RenameWindow : GameObject;
 
 var fadeNMtrig : boolean;
 var fadeNMvalue : float;
@@ -251,7 +254,7 @@ function useSentries ()
 function requestSentries ()
 {
 	//Camera.main.networkView.RPC ("requestSentries", RPCMode.Server);
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb&sentries");
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&requestdb&sentries");
 	yield reqData;
 }
 
@@ -272,7 +275,7 @@ function useRockets ()
 function requestRockets ()
 {
 	//Camera.main.networkView.RPC ("requestRockets", RPCMode.Server);
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb&rockets");
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&requestdb&rockets");
 	yield reqData;
 }
 
@@ -334,7 +337,7 @@ function Azurite (amount : int)
 function requestModules ()
 {
 	//Camera.main.networkView.RPC ("requestModules", RPCMode.Server);
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb&modules");
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&requestdb&modules");
 	yield reqData;
 }
 
@@ -474,6 +477,7 @@ function Start ()
 	
 	mm = GameObject.Find("MiniMap");
 	
+	usrID = PlayerPrefs.GetString("PlayerID");
 	usrAccount = PlayerPrefs.GetString("PlayerName");
 	usrPassword = PlayerPrefs.GetString("PlayerPassword");
 	usrGM = PlayerPrefs.GetInt("PlayerGM");
@@ -593,7 +597,7 @@ function Start ()
 
 function requestStartData ()
 {
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&requestdb" + 
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&requestdb" + 
 					"&memberships&minerals&amber&azurite&modules&rockets&sentries");
 	yield reqData;
 }
@@ -651,7 +655,7 @@ function updateDBTimer ()
 	{
 		var tpos : Vector3 = GameObject.Find(usrAccount).transform.position;
 		
-		var req2Data = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+		var req2Data = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
 					"&x=" + tpos.x + "&y=" + tpos.y + "&z=" + tpos.z + "&activeshiphealth=" + usrHealth +
 					"&activeshiprockets=" + usrRockets + "&activeshipsentries=" + usrSentries + "&activeshipshields" + usrShields);
 	}
@@ -902,6 +906,7 @@ function Update ()
 	{
 		if (uiData.isDone)
 		{
+			//Debug.Log(uiData.text);
 			var iBuffer = uiData.text.Split(";"[0]);
 			var i0 : int = int.Parse(iBuffer[0]);
 			var i1 : int = int.Parse(iBuffer[1]);
@@ -966,7 +971,18 @@ function Update ()
 					
 				if (splitBuff[0] == "sentries")
 					usrSentries = int.Parse(splitBuff[1].ToString());
+				
+				if (splitBuff[0] == "namechange")
+				{
+					var nchange = splitBuff[1].ToString();
 					
+					if (nchange == "GOOD")
+					{
+						RenameWindow.SetActive(true);
+						Debug.Log("TIME TO RENAME PLAYER");
+					}
+				}
+				
 				/* Been superseeded by new Photon Network code
 				requestMemberships();
 				requestMinerals();
@@ -988,9 +1004,9 @@ function Update ()
 
 function rBSui (amount : int)
 {
-	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb&bloodstone=" + amount);
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb&bloodstone=" + amount);
 	yield uiData;
-	uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + usrAccount + "&password=" + usrPassword + "&updateinfo");
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updateinfo");
 	yield uiData;
 }
 
@@ -1108,6 +1124,21 @@ function usesSentry ()
 	
 	else
 	{ return false; }
+}
+
+function doRename()
+{
+	var tmpRename = RenameWindow.transform.FindChild("Input").GetComponent(UIInput).value;
+	
+	RenameWindow.SetActive(false);
+	sendRename(tmpRename);
+	usrAccount = tmpRename;
+}
+
+function sendRename (uname : String)
+{
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb&uname=" + uname);
+	yield uiData;
 }
 
 function OnGUI()
@@ -1282,10 +1313,16 @@ function OnGUI()
 		}
 		if (GUI.Button(Rect(Screen.width - 90, 10, 80, 80), mShop, ""))
 		{
-			/*if (BuddyWindow == true)
-				BuddyWindow = false;
-			else if (BuddyWindow == false)
-				BuddyWindow = true;*/
+			if (ShopWindow.active == true)
+			{
+				GameObject.Find("TriniStation").GetComponent(NewStationScript).unDock();
+				ShopWindow.SetActive(false);
+			}
+			else if (ShopWindow.active == false)
+			{
+				GameObject.Find("TriniStation").GetComponent(NewStationScript).Dock();
+				ShopWindow.SetActive(true);
+			}
 			
 		}
 		//else if (GUI.Button(Rect(Screen.width/2-(50*2), 5, 50, 50), mPlanets, ""))
@@ -1849,7 +1886,7 @@ function HitNPCRequest(name:String,Nname:String,power:float,info:PhotonMessageIn
 @RPC
 function RankExpUpdate(name:String,rank:int,experience:float,experiencemax:float)
 {
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
 				"&rank=" + rank + "&experience=" + experience + "&experiencemax=" + experiencemax);
 }
 
@@ -1896,7 +1933,7 @@ function collectModule ()
 
 function rMui (amount : int)
 {
-	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb&modules=" + amount);
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb&modules=" + amount);
 	yield uiData;
 	requestModules();
 }
@@ -2338,14 +2375,14 @@ function CompleteSMconfirm()
 
 function saveCompleted ()
 {
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
 				"&currentsm=" + usrsmCurrent + "&missionengaged=0&completedmissions=" + usrsmComplete);
 }
 
 @RPC
 function EngageSMrequest(sm:int)
 {
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
 				"&currentsm=" + sm + "&missionengaged=" + 1);
 	EngageSMconfirm(sm);
 }
@@ -2379,6 +2416,9 @@ function SquadMissionUpdate(trig:int)
 @RPC
 function InstallActivatorRequest()
 {
+	var req2data = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb&activator=1");
+	yield req2data;
+	InstallActivator();
 }
 
 @RPC
@@ -2389,14 +2429,14 @@ function InstallActivator()
 
 function reqBSAT()
 {
-	uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + usrAccount + "&password=" + usrPassword + "&updateinfo");
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updateinfo");
 	yield uiData;
 }
 
 @RPC
 function PurchaseRequest (upgradeCode : String)
 {
-	reqData = new WWW("http://www.spaceunfolding.com/remotedb/shop.php?username=" + usrAccount + "&password=" + usrPassword + "&buy=" + upgradeCode);
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/shop.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&buy=" + upgradeCode);
 	yield reqData;
 	
 	requestStartData();

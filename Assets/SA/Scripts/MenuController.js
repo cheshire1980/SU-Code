@@ -62,6 +62,7 @@ var NewButtonVisible = true;
 var CreateButtonVisible = false;
 
 // Setting Default Values for Accounts
+static var usrID = "";
 static var usrAccount = "";
 var usrPassword = "";
 var usrEmail = "";
@@ -418,7 +419,7 @@ function enableGuest()
 	{
 		usrAccount = tempAccount;
 		usrPassword = tempPassword;
-		dbNewCreate(usrAccount, usrPassword, "");
+		dbNewCreate(usrID, usrAccount, usrPassword, "");
 		enableGuestLogin();
 	}
 	
@@ -450,9 +451,9 @@ function enableNew()
 	
 }
 
-function dbNewCreate (uname : String, upass : String, uemail : String)
+function dbNewCreate (uid : String, uname : String, upass : String, uemail : String)
 {
-	dbnew = new WWW("http://www.spaceunfolding.com/remotedb/newacct.php?username=" + uname + "&password=" + upass + "&email=" + uemail);
+	dbnew = new WWW("http://www.spaceunfolding.com/remotedb/newacct.php?id=" + uid + "&username=" + uname + "&password=" + upass + "&email=" + uemail);
 	yield dbnew;
 }
 
@@ -465,7 +466,7 @@ function enableCreate()
 	CreateButtonVisible = false;
 	GameObject.Find("Info").GetComponent(UILabel).text = "Checking player name availability, please wait ...";
 	//networkView.RPC("New",RPCMode.Server,usrAccount,usrPassword,usrEmail);
-	dbNewCreate(usrAccount, usrPassword, usrEmail);
+	dbNewCreate(usrID, usrAccount, usrPassword, usrEmail);
 }
 
 function enableNewCreate()
@@ -478,7 +479,7 @@ function enableNewCreate()
 	CreateButtonVisible = false;
 	GameObject.Find("Info").GetComponent(UILabel).text = "Checking player name availability, please wait ...";
 	//networkView.RPC("New",RPCMode.Server,usrAccount,usrPassword,usrEmail);
-	dbNewCreate(usrAccount, usrPassword, usrEmail);
+	dbNewCreate(usrAccount, usrAccount, usrPassword, usrEmail);
 }
 
 function enableExisting()
@@ -528,7 +529,7 @@ function enableLogin()
 	connFlag = true;
 	phase1 = true;
 	
-	dbLogin(usrAccount, usrPassword);
+	dbLogin(usrAccount, usrAccount, usrPassword);
 		
 	//Network.Connect(svrAddr,svrPort);
 	//PhotonNetwork.ConnectUsingSettings("v1.0");
@@ -536,9 +537,9 @@ function enableLogin()
 
 }
 
-function dbLogin (uname : String, upass : String)
+function dbLogin (uid : String, uname : String, upass : String)
 {
-	dbconn = new WWW("http://www.spaceunfolding.com/remotedb/login.php?username=" + usrAccount + "&password=" + usrPassword);
+	dbconn = new WWW("http://www.spaceunfolding.com/remotedb/login.php?id=" + uid + "&username=" + uname + "&password=" + upass);
 	yield dbconn;
 }
 
@@ -610,24 +611,36 @@ function dbNewCreate2 ()
 {
 	if (dbnew != null)
 	{
-		if (dbnew.text == "GOOD")
+		if (dbnew.isDone)
 		{
-			AccountCreated();
-			dbnew = null;
-		}
-		
-		else if (dbnew.text == "BAD")
-		{
-			AccountExists();
-			dbnew = null;
+			if (dbnew.text == "GOOD")
+			{
+				AccountCreated();
+				dbnew = null;
+			}
+			
+			else if (dbnew.text == "BAD")
+			{
+				AccountExists();
+				dbnew = null;
+			}
 		}
 	}
 }
 
 function Update ()
 {
-	if (PlayerPrefs.GetInt("AutoCreateName") == 1)
+	if (PlayerPrefs.GetInt("AutoCreateName") > 0)
 	{
+		if (PlayerPrefs.GetInt("AutoCreateName") == 1)
+		{
+			// Display Logging into Facebook
+		}
+		else if (PlayerPrefs.GetInt("AutoCreateName") == 2)
+		{
+			// Display Logging into Google
+		}
+		
 		PlayerPrefs.SetInt("AutoCreateName",0);
 		//enableGuest();
 		//dbNewCreate(PlayerPrefs.GetString("AutoCreateName"), SystemInfo.deviceUniqueIdentifier, "");
@@ -640,6 +653,7 @@ function Update ()
 		sw.Close();
 		#endif
 
+		usrID = PlayerPrefs.GetString("AutoCreatePassword");
 		enableGuest();
 	}
 	
@@ -671,7 +685,7 @@ function enableGuestLogin()
 	connFlag = true;
 	phase1 = true;
 	//Network.Connect(svrAddr,svrPort);
-	dbLogin(usrAccount, usrPassword);
+	dbLogin(usrID, usrAccount, usrPassword);
 
 }
 
@@ -707,7 +721,12 @@ function LoggedIn(Name:String,location:Vector3,gm:int,rank:int,experience:float,
 	sw.Close();
 	#endif
 	
+	if (usrID == "")
+		usrID = usrAccount;
+	
 	usrAccount = Name;
+		
+	PlayerPrefs.SetString("PlayerID",usrID);
 	PlayerPrefs.SetString("PlayerName",usrAccount);
 	PlayerPrefs.SetString("PlayerPassword",usrPassword);
 	PlayerPrefs.SetInt("PlayerGM",gm);

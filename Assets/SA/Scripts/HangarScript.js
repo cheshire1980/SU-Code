@@ -113,7 +113,7 @@ function selectShip (id : String)
 
 function reqLoadShip(id : String)
 {
-	sData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&loadship=" + id);
+	sData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&loadship=" + id);
 	yield sData;
 }
 

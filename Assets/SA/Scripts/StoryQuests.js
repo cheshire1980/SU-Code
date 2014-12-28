@@ -1106,7 +1106,7 @@ function OnGUI()
 				drone = Instantiate(droneTemplate, Vector3(4,0,-32), Quaternion.identity);
 				drone.name = "drone";
 
-				Camera.main.networkView.RPC("InstallActivatorRequest",RPCMode.Server);
+				Camera.main.GetComponent(HUD).InstallActivatorRequest();
 				sm5trig1 = true;
 			}
 			
@@ -1125,7 +1125,7 @@ function OnGUI()
 			
 			else if (sm5trig3 == false)
 			{
-				sMessage("Activate the gate by going near it and using the gate activator on your tech bar, I will meet you on the other side for some new missions!");
+				sMessage("Activate the gate by going near it and using the gate activator on your tech bar, I will meet you on the other side at KRUL for some new missions!");
 				
 				if (HUD.activatorMission == true)
 				{
@@ -1183,7 +1183,7 @@ function OnGUI()
 			
 			else if (sm0trig2 == false)
 			{
-				sMessage("The other side of this gate is Krul space territory, lets get back to Trini space and head to the yellow target");
+				sMessage("This is Krul space territory, lets get back to Trini space using the gate and head to the yellow target");
 				
 				if (Vector3.Distance(GameObject.Find("drone").transform.position, GameObject.Find(HUD.usrAccount).transform.position) < 10)
 				{
