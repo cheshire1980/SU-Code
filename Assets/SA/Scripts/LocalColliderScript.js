@@ -45,7 +45,7 @@ function OnTriggerEnter(blaster:Collider)
 					HUD.usrHealth = HUD.usrHealth - bbScript.power;
 					HUD.healthUpdate = true;
 					blaster.tag = "blasterused";
-					Camera.mainCamera.networkView.RPC("HealthUpdateRequest",RPCMode.Server,HUD.usrAccount,HUD.usrHealth,HUD.usrHealthMax);
+					//Camera.mainCamera.networkView.RPC("HealthUpdateRequest",RPCMode.Server,HUD.usrAccount,HUD.usrHealth,HUD.usrHealthMax);
 					
 					if (HUD.usrHealth <= 0)
 					{

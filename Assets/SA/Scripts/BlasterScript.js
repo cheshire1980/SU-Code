@@ -64,7 +64,7 @@ function OnTriggerEnter(obj:Collider)
 					{
 						if (sentryBlaster == true)
 						{
-							Camera.main.GetComponent(HUD).requestPvpDamage(obj.name, power);
+							Camera.main.GetComponent(HUD).requestPvpDamage(target.name, power);
 							PhotonNetwork.Destroy(gameObject);
 						}
 					}

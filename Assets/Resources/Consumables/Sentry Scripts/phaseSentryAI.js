@@ -37,6 +37,7 @@ function shootSentry(target : Transform)
 		var bbScript : BlasterScript = sentryBlaster1.GetComponent("BlasterScript");
 		bbScript.power = HUD.usrBlasterPower / 2;
 		bbScript.sentryBlaster = true;
+		bbScript.target = target;
 		
 		bbScript = sentryBlaster2.GetComponent("BlasterScript");
 		bbScript.power = HUD.usrBlasterPower / 2;

@@ -1957,7 +1957,7 @@ function OnGUI()
 					Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);
 					GameObject.Find(HUD.usrAccount).GetComponent(PlayerMovement).rPlayer(HUD.usrAccount);
 					
-					var respawn = Network.Instantiate(shivanInterceptor, tmppos, tmprot,0);
+					var respawn = PhotonNetwork.Instantiate("shivanInterceptor", tmppos, tmprot,0);
 					respawn.name = HUD.usrAccount;
 					
 					drone = Instantiate(droneTemplate, Vector3(-2214,0,-404), Quaternion.identity);

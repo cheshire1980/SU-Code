@@ -41,6 +41,7 @@ function Start ()
 				{
 					target = GameObject.Find(MoveAround.SelectedTarget);
 					transform.LookAt(target.transform.position);
+					gameObject.GetComponent(PhotonView).RPC("rocketData", PhotonTargets.Others, target.name, transform.rotation);
 				}
 			}
 		}
@@ -53,10 +54,18 @@ function Start ()
 	}
 }
 
+function waitDestroy()
+{
+	yield WaitForSeconds(2);
+	
+	if (target == null)
+		PhotonNetwork.Destroy(gameObject);
+}
+
 function Update ()
 {
-	if (pView.isMine)
-	{
+	//if (pView.isMine)
+	//{
 		if (target != null)
 		{
 			tempLocation = target.transform.position;
@@ -66,27 +75,15 @@ function Update ()
 		
 		if (target == null)
 		{
-			//if (Vector3.Distance(transform.position, tempLocation) < 0.5)
-				//GameObject.Destroy(GameObject.Find(gameObject.name));
-				PhotonNetwork.RemoveRPCs(pView);
-				//PhotonNetwork.Destroy(gameObject);
+			//PhotonNetwork.RemoveRPCs(pView);
+			waitDestroy();
 		}
-		
-		/*if (Vector3.Distance(transform.position, tempLocation) == 0)
-		{
-			Network.RemoveRPCs(GameObject.Find(HUD.usrAccount).networkView.viewID);
-			Network.Destroy(networkView.viewID);
-
-			GameObject.Destroy(GameObject.Find(gameObject.name));
-			var exp = Instantiate(explosion, transform.position, Quaternion.identity);
-			exp.tag = "rocket";
-		}*/
-	}
+	//}
 	
-	if (pView.isMine == false)
-    {
-        SyncedMovement();
-    }
+	//if (pView.isMine == false)
+    //{
+    //    SyncedMovement();
+    //}
 }
 
 function quaternionIsNan (quat : Quaternion)
@@ -156,10 +153,6 @@ function OnTriggerEnter(obj:Collider)
 								if (1 == 1)
 									Camera.main.GetComponent(HUD).requestPvpDamage(target.name, power);
 							}
-							else if (Network.isServer)
-							{
-								Camera.main.networkView.RPC ("returnRegularDamage", RPCMode.All, target.name, power);
-							}
 						}
 		            }
 				}
@@ -192,7 +185,17 @@ function OnTriggerEnter(obj:Collider)
 	}
 }
 
-function OnSerializeNetworkView (stream : BitStream, info : NetworkMessageInfo)
+@RPC
+function rocketData (theTarget : String, theRotation : Quaternion)
+{
+	if (gameObject.GetComponent(PhotonView).isMine == false)
+	{
+		target = GameObject.Find(theTarget);
+		transform.rotation = theRotation;
+	}
+}
+
+function OnPhotonSerializeView(stream : PhotonStream, info : PhotonMessageInfo)
 {	
 	var syncPosition : Vector3;
 	var syncRotation : Quaternion;

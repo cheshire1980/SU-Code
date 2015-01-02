@@ -73,7 +73,7 @@ static var usrGM : int;
 static var usrAvatar = "";
 static var usrPvp = 0;
 static var usrBlasterPower : float;
-static var usrAlienMode : boolean;
+static var usrAlienMode : int;
 
 static var usrZone : String;
 static var usrBloodstone : int;
@@ -285,28 +285,66 @@ function amountRockets (amount : int)
 	usrRockets = amount;
 }
 
+function craftData ()
+{
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + 
+						"&updatedb&minerals=" + usrMinerals + "&modules=" + usrModules + "&amber=" + usrAmber + "&azurite=" + usrAzurite +
+						"&activeshiprockets=" + usrRockets + "&activeshipsentries=" + usrSentries);
+	yield uiData;
+	//requestMinerals();	
+}
+
 @RPC
 function refineToAmber ()
 {
-	Camera.main.networkView.RPC ("refineToAmber", RPCMode.Server);
+	//Camera.main.networkView.RPC ("refineToAmber", RPCMode.Server);
+	
+	if (usrMinerals >= 20)
+	{
+		usrMinerals -= 20;
+		usrAmber += 10;
+
+		craftData();		
+	}
 }
 
 @RPC
 function refineToAzurite ()
 {
-	Camera.main.networkView.RPC ("refineToAzurite", RPCMode.Server);
+	if (usrMinerals >= 20)
+	{
+		usrMinerals -= 20;
+		usrAzurite += 10;
+		
+		craftData();		
+	}
 }
 
 @RPC
 function fuseSentries ()
 {
-	Camera.main.networkView.RPC ("fuseSentries", RPCMode.Server);
+	if (usrAmber >= 3 && usrAzurite >= 3 && usrModules >= 20)
+	{
+		usrAmber -= 3;
+		usrAzurite -= 3;
+		usrModules -= 20;
+		usrSentries += 10;
+		
+		craftData();		
+	}
 }
 
 @RPC
 function fuseRockets()
 {
-	Camera.main.networkView.RPC ("fuseRockets", RPCMode.Server);
+	if (usrAmber >= 2 && usrModules >= 20)
+	{
+		usrAmber -= 2;
+		usrModules -= 20;
+		usrRockets += 5;
+		
+		craftData();		
+	}
 }
 
 @RPC
@@ -350,7 +388,9 @@ function Modules (amount : int)
 @RPC
 function requestMinerals ()
 {
-	Camera.main.networkView.RPC ("requestMinerals", RPCMode.Server);
+	//Camera.main.networkView.RPC ("requestMinerals", RPCMode.Server);
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&requestdb&minerals");
+	yield reqData;
 }
 
 @RPC
@@ -1492,7 +1532,7 @@ function OnGUI()
 						afterburner = true;
 				}
 				
-				// Special Tech
+				// Special Tech -- Android Version
 				if (r4.Contains(tpos) && tLetgo == false)
 				{
 					tLetgo = true;
@@ -1619,6 +1659,8 @@ function OnGUI()
 				else if (afterburner == false)
 					afterburner = true;
 			}
+			
+			// Special Tech -- Computer Version
 			if (usesRockets() == true)
 			{
 				if (GUI.Button(Rect(Screen.width - 95, Screen.height - 240, 80, 80),"",""))
@@ -1880,7 +1922,9 @@ function HitNPCRequest(name:String,Nname:String,power:float,info:PhotonMessageIn
 		Camera.main.GetComponent(npcKrulzone6).hitNPC(Nname + "S",power,info);
 	if (Camera.main.GetComponent(npcLuntazone1).spawndownMode == false)
 		Camera.main.GetComponent(npcLuntazone1).hitNPC(Nname + "S",power,info);
-	
+
+	Camera.main.GetComponent(asteroidsTrinizone).hitNPC(Nname + "S",power,info);
+	Camera.main.GetComponent(asteroidsKrulzone).hitNPC(Nname + "S",power,info);
 }
 
 @RPC
@@ -1941,6 +1985,13 @@ function rMui (amount : int)
 @RPC
 function receiveModule ()
 {
+}
+
+function rMinui (amount : int)
+{
+	uiData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb&minerals=" + amount);
+	yield uiData;
+	requestMinerals();	
 }
 
 @RPC
@@ -2126,7 +2177,7 @@ function LocalShoot()
 	{
 		if (blast11 == true)
 		{
-			usrAlienMode = false;
+			requestAlienMode(false);
 			var Blaster = Instantiate(BlasterPrefab,
 									GameObject.Find(usrAccount + "/BlasterSpawn").transform.position,
 									GameObject.Find(usrAccount).transform.rotation);
@@ -2496,11 +2547,36 @@ function returnShipName (name : String)
 	usrActiveshipname = name;
 }
 
-@RPC
-function requestAlienMode (flag : boolean) { usrAlienMode = flag; Camera.main.networkView.RPC ("requestAlienMode", RPCMode.Server, flag); }
+function rAM (flag : int)
+{
+	reqData = new WWW("http://www.spaceunfolding.com/remotedb/request.php?id=" + usrID + "&username=" + usrAccount + "&password=" + usrPassword + "&updatedb" + 
+				"&alienmode=" + flag);
+	yield reqData;
+}
 
 @RPC
-function requestPvpDamage (target : String, damage : float) { Camera.main.networkView.RPC ("requestPvpDamage", RPCMode.Server, target, damage); }
+function requestAlienMode (flag : boolean)
+{
+	//usrAlienMode = flag;
+	var flagmode : int;
+	//Camera.main.networkView.RPC ("requestAlienMode", RPCMode.Server, flag);
+	
+	if (flag == true)
+	{
+		flagmode = 1;
+		usrAlienMode = 1;
+	}
+	else if (flag == false)
+	{
+		flagmode = 0;
+		usrAlienMode = 0;
+	}
+	
+	rAM(flagmode);
+}
+
+@RPC
+function requestPvpDamage (target : String, damage : float) { Camera.main.GetComponent(PhotonView).RPC("returnPvpDamage", PhotonTargets.All, target, damage); }
 
 @RPC
 function returnPvpDamage (target : String, damage : float)

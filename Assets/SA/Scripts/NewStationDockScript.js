@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+var craftWindow : GameObject;
+
 
 function Dock()
 {
@@ -30,7 +32,15 @@ function bSkills ()
 
 function bUpgrades ()
 {
-	GameObject.Find("TriniStation").GetComponent(NewStationScript).bUpgrades();
+	//GameObject.Find("TriniStation").GetComponent(NewStationScript).bUpgrades();
+	
+	if (craftWindow != null)
+	{
+		if (craftWindow.active == true)
+			craftWindow.SetActive(false);
+		else if (craftWindow.active == false)
+			craftWindow.SetActive(true);
+	}
 }
 
 function prevShip ()

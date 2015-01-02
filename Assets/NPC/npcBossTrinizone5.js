@@ -377,7 +377,7 @@ function FixedUpdate () {
 							{
 								if (Vector3.Distance(GameObject.Find(NPCName[i]).transform.position,GameObject.Find(HUD.usrAccount).transform.position) < npcAggroRange)
 								{
-									if (NPCaggro[i] == false)
+									if (NPCaggro[i] == false && HUD.usrAlienMode == 0)
 									{
 										NPCaggro[i] = true;
 										NPCaggroname[i] = HUD.usrAccount;
