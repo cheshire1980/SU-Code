@@ -113,7 +113,7 @@ function selectShip (id : String)
 
 function reqLoadShip(id : String)
 {
-	sData = new WWW("http://www.spaceunfolding.com/remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&loadship=" + id);
+	sData = new WWW("http://www.iniquitygames.com/su_remotedb/ships.php?id=" + HUD.usrID + "&username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&loadship=" + id);
 	yield sData;
 }
 
@@ -136,7 +136,7 @@ function renameShip ()
 function renameSendData (info : String)
 {
 	info = info.Replace(" ","%20");
-	renameData = new WWW("http://www.spaceunfolding.com/remotedb/shop.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&buy=" + info);
+	renameData = new WWW("http://www.iniquitygames.com/su_remotedb/shop.php?username=" + HUD.usrAccount + "&password=" + HUD.usrPassword + "&buy=" + info);
 	yield renameData;
 }
 

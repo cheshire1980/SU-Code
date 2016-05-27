@@ -453,7 +453,7 @@ function enableNew()
 
 function dbNewCreate (uid : String, uname : String, upass : String, uemail : String)
 {
-	dbnew = new WWW("http://www.spaceunfolding.com/remotedb/newacct.php?id=" + uid + "&username=" + uname + "&password=" + upass + "&email=" + uemail);
+	dbnew = new WWW("http://www.iniquitygames.com/su_remotedb/newacct.php?id=" + uid + "&username=" + uname + "&password=" + upass + "&email=" + uemail);
 	yield dbnew;
 }
 
@@ -539,7 +539,7 @@ function enableLogin()
 
 function dbLogin (uid : String, uname : String, upass : String)
 {
-	dbconn = new WWW("http://www.spaceunfolding.com/remotedb/login.php?id=" + uid + "&username=" + uname + "&password=" + upass);
+    dbconn = new WWW("http://www.iniquitygames.com/su_remotedb/login.php?id=" + uid + "&username=" + uname + "&password=" + upass);
 	yield dbconn;
 }
 
