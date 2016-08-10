@@ -18,7 +18,6 @@ function Start () {
 function OnTriggerEnter(blaster:Collider)
 {
 	var bbScript : BlasterScript = blaster.GetComponent("BlasterScript");
-	var rocketScript : rocketAI = blaster.GetComponent("rocketAI");
 	
 	if (blaster.tag == "myblaster")
 	{
@@ -35,7 +34,7 @@ function OnTriggerEnter(blaster:Collider)
 		Destroy(GameObject.Find(blaster.name));
 	}
 	
-	if (blaster.tag == "blaster")
+	else if (blaster.tag == "blaster")
 	{
 		var spark1 = Instantiate(sparks, gameObject.transform.position, Quaternion.identity);
 		//HUD.usrHealth = HUD.usrHealth - bbScript2.power;
@@ -47,8 +46,9 @@ function OnTriggerEnter(blaster:Collider)
 		//Camera.main.GetComponent(PhotonView).RPC("HitNPCRequest",PhotonTargets.All,HUD.usrAccount,gameObject.name,HUD.usrBlasterPower);
 	}
 	
-	if (blaster.tag == "rocket")
+	else if (blaster.tag == "rocket")
 	{		
+		var rocketScript : rocketAI = blaster.GetComponent("rocketAI");
 		AudioSource.PlayClipAtPoint(blasterhit, gameObject.transform.position);
 		
 		yourDamage = yourDamage + rocketScript.power;

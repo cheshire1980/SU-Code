@@ -460,7 +460,7 @@ function FixedUpdate () {
 									//npcShoot(NPCName[i],npcPower,GameObject.Find(NPCName[i]).transform.position);
 									if (GameObject.Find(NPCaggroname[i]) != null)
 									{
-										var shootRocket = Network.Instantiate(rocketTemplate, GameObject.Find(NPCName[i]).transform.position, Quaternion.identity,0);
+										var shootRocket = Instantiate(rocketTemplate, GameObject.Find(NPCName[i]).transform.position, Quaternion.identity);
 										shootRocket.GetComponent(rocketAI).target = GameObject.Find(NPCaggroname[i]);
 										shootRocket.GetComponent(rocketAI).power = npcPower;
 										shootRocket.GetComponent(rocketAI).npcOwned = true;

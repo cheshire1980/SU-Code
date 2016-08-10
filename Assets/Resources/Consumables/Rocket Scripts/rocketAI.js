@@ -59,7 +59,17 @@ function waitDestroy()
 	yield WaitForSeconds(2);
 	
 	if (target == null)
-		PhotonNetwork.Destroy(gameObject);
+	{
+		if (npcOwned == false)
+		{
+			PhotonNetwork.Destroy(gameObject);		
+		}
+		else if (npcOwned == true)
+		{
+			Destroy(gameObject);
+		}
+
+	}
 }
 
 function Update ()
@@ -176,8 +186,9 @@ function OnTriggerEnter(obj:Collider)
 			{
 				HUD.usrHealth = HUD.usrHealth - power;
 
-				var exp1 = PhotonNetwork.Instantiate("explosion", transform.position, Quaternion.identity,0);
-				PhotonNetwork.Destroy(gameObject);
+				var exp1 = Instantiate(explosion, transform.position, Quaternion.identity);
+				//PhotonNetwork.Destroy(gameObject);
+				Destroy(gameObject);
 				exp1.tag = "rocket";
 				
 			}

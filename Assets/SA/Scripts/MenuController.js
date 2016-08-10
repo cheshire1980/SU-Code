@@ -453,6 +453,10 @@ function enableNew()
 
 function dbNewCreate (uid : String, uname : String, upass : String, uemail : String)
 {
+	usrID = uid;
+	usrAccount = uname;
+	usrPassword = upass;
+	
 	dbnew = new WWW("http://www.iniquitygames.com/su_remotedb/newacct.php?id=" + uid + "&username=" + uname + "&password=" + upass + "&email=" + uemail);
 	yield dbnew;
 }
